@@ -123,6 +123,10 @@ input, select, textarea {
 
 	.item h3{
 		font-weight:bold;
+		padding-bottom: 0.5rem;
+	}
+	.item h4{
+		padding:1px;
 	}
 
 		h1 a strong, h2 a strong, h3 a strong, h4 a strong, h5 a strong, h6 a strong {
