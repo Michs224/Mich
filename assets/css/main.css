@@ -1,6 +1,8 @@
 @import url("fontawesome-all.min.css");
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,400,600");
-
+#nav li a {
+    font-size: 0.95em; /* Sesuaikan ukuran sesuai preferensi Anda */
+}
 /*
 	Prologue by HTML5 UP
 	html5up.net | @ajlkn
@@ -1757,6 +1759,62 @@ input, select, textarea {
 		.row > section, .row > article {
 			margin-bottom: 0;
 		}
+
+		#certificates {
+			background-color: #f7f7f7;
+			padding: 4em 0;
+		}
+
+	.cert-grid {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+
+	}
+
+	.cert-item {
+		width: calc(33.33% - 1em); /* Mengatur lebar setengah dari kontainer dengan sedikit ruang kosong */
+		margin-bottom: 1em;
+	}
+
+	.cert-image {
+		max-width: 90%;
+		height: auto;
+		margin-bottom: 1em;
+	}
+
+	.cert-item h3 {
+		font-size: 1.1em; /* Ubah ukuran judul sertifikat */
+		margin-bottom: 0.5em;
+	}
+
+	.cert-item p {
+		font-size: 0.9em; /* Ubah ukuran informasi tanggal penerbitan */
+		color: #666;
+		margin-bottom: 1em; */
+	}
+
+	/* Responsiveness */
+	@media (max-width: 1024px) {
+		.cert-grid {
+			justify-content: center;
+		}
+		.cert-item {
+			width: calc(50% - 1em); /* Menampilkan 2 sertifikat per baris */
+		}
+	}
+
+	@media (max-width: 768px) {
+			.cert-grid {
+		justify-content: center;
+	}
+		.cert-item {
+			width: 100%; /* Menampilkan 1 sertifikat per baris pada layar lebih kecil */
+		}
+	}
+
+
+
 
 /* Image */
 
