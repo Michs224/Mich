@@ -10,6 +10,13 @@ video{
 
 section{
     background:#000 ;
+
+        height: 100vh; /* Mengatur tinggi elemen section sesuai tinggi viewport */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; /* Menghilangkan overflow yang tidak diinginkan */
+    
 }
 
 h1{
@@ -18,13 +25,14 @@ h1{
     transform: translateY(-50%);
     width: 100%;
     text-align: center;
-    letter-spacing: 0.2rem;
+    letter-spacing: 0.1rem;
     /* text-transform: uppercase; */
     color: #f5f5f5;
-    font-size: 4em;
+    font-size: 4vw;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     justify-content: center;
 }
+
 
 h1 span{
     display: inline-block;
