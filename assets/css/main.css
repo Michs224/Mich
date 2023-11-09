@@ -1791,7 +1791,7 @@ input, select, textarea {
 	.cert-item p {
 		font-size: 0.9em; /* Ubah ukuran informasi tanggal penerbitan */
 		color: #666;
-		margin-bottom: 1em; */
+		margin-bottom: 1em;
 	}
 
 	/* Responsiveness */

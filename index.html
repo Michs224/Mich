@@ -1,54 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/css/smoke.css">
-    <title>Mich - PortfolioWebsite</title>
-</head>
-<body>
-    <section>
-        <video src="images/smoke.mp4" autoplay muted ></video>
-        <h1>
-            <span>M</span>
-            <span>a</span>
-            <span>c</span>
-            <span>h</span>
-            <span>i</span>
-            <span>n</span>
-            <span>e</span>
-            <span> </span>           
-            <span>L</span>
-            <span>e</span>
-            <span>a</span>
-            <span>r</span>
-            <span>n</span>
-            <span>i</span>
-            <span>n</span>
-            <span>g</span>
-            <br>
-            <span>E</span>
-            <span>n</span>
-            <span>t</span>
-            <span>h</span>
-            <span>u</span>
-            <span>s</span>
-            <span>i</span>
-            <span>a</span>
-            <span>s</span>
-            <span>t</span>
-        </h1>
-    </section>
-    <script>
-        window.addEventListener('load', function () {
-            setTimeout(function () {
-                document.body.classList.add('hidden');
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="assets/css/smoke.css" />
+        <title>Mich - PortfolioWebsite</title>
+        <!-- My Font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Poppins:ital,wght@0,100;0,300;0,400;0,600;0,700;1,200;1,700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <section class="UI">
+            <!-- <video src="images/smoke.mp4" autoplay muted></video> -->
+            <div class="ui1">
+                <h1 class="head1">AI</h1>
+                <h1 class="head2">Enthusiast</h1>
+                <div class="container">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </section>
+        <script>
+            window.addEventListener("load", function () {
                 setTimeout(function () {
-                    window.location.href = 'MichWebsite.html';
-                }, 1800); // Waktu transisi CSS (2 detik) sesuai dengan waktu di CSS
-            }, 2000); // Ubah 5000 menjadi jumlah milidetik yang Anda inginkan sebelum pengalihan terjadi
-        });
-    </script>
-</body>
+                    document.body.classList.add("hidden");
+                    setTimeout(function () {
+                        window.location.href = "MichWebsite.html";
+                    }, 1800);
+                }, 2000);
+            });
+        </script>
+    </body>
 </html>
