@@ -410,7 +410,7 @@ input, select, textarea {
 	}
 
 	.cert-item {
-		width: calc(33.33% - 1em); /* Mengatur lebar setengah dari kontainer dengan sedikit ruang kosong */
+		width: calc(33.33% - 1em); 
 		margin-bottom: 1em;
 	}
 
@@ -421,12 +421,12 @@ input, select, textarea {
 	}
 
 	.cert-item h3 {
-		font-size: 1.1em; /* Ubah ukuran judul sertifikat */
+		font-size: 1.1em; 
 		margin-bottom: 0.5em;
 	}
 
 	.cert-item p {
-		font-size: 0.9em; /* Ubah ukuran informasi tanggal penerbitan */
+		font-size: 0.9em;
 		color: #666;
 		margin-bottom: 1em;
 	}
@@ -437,7 +437,7 @@ input, select, textarea {
 			justify-content: center;
 		}
 		.cert-item {
-			width: calc(50% - 1em); /* Menampilkan 2 sertifikat per baris */
+			width: calc(50% - 1em); 
 		}
 	}
 
@@ -446,7 +446,7 @@ input, select, textarea {
 		justify-content: center;
 	}
 		.cert-item {
-			width: 100%; /* Menampilkan 1 sertifikat per baris pada layar lebih kecil */
+			width: 100%; 
 		}
 	}
 
