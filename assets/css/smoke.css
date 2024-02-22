@@ -3,12 +3,11 @@
     padding: 0;
     box-sizing: border-box;
 }
-.M-icon{
-	border-radius: 50% ;
-}
+
 video {
     object-fit: cover;
 }
+
 body {
     opacity: 5;
     transition: opacity 2s ease-in-out;
@@ -17,6 +16,7 @@ body {
     -ms-transition: opacity 2s ease-in-out;
     -o-transition: opacity 2s ease-in-out;
 }
+
 section {
     background: #000;
     height: 100vh;
