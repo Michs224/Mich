@@ -138,13 +138,13 @@ input, select, textarea {
 		letter-spacing: -1px;
 	}
 
-		h2.alt {
+		/* h2.alt {
 			color: #888;
 		}
 
 			h2.alt strong {
 				color: #666;
-			}
+			} */
 	#msg{
 		font-weight:bold;
 		color: #028871;
@@ -1768,7 +1768,7 @@ input, select, textarea {
 	}
 
 	.cert-item {
-		width: calc(33.33% - 1em); /* Mengatur lebar setengah dari kontainer dengan sedikit ruang kosong */
+		width: calc(33.33% - 1em); /* Lebar setengah dari kontainer dengan sedikit ruang kosong */
 		margin-bottom: 1em;
 	}
 
@@ -1779,12 +1779,12 @@ input, select, textarea {
 	}
 
 	.cert-item h3 {
-		font-size: 1.1em; /* Ubah ukuran judul sertifikat */
+		font-size: 1em; /* Judul sertifikat */
 		margin-bottom: 0.5em;
 	}
 
 	.cert-item p {
-		font-size: 0.9em; /* Ubah ukuran informasi tanggal penerbitan */
+		font-size: 0.9em; /* Informasi tanggal penerbitan */
 		color: #666;
 		margin-bottom: 1em;
 	}
@@ -1795,7 +1795,7 @@ input, select, textarea {
 			justify-content: center;
 		}
 		.cert-item {
-			width: calc(50% - 1em); /* Menampilkan 2 sertifikat per baris */
+			width: calc(50% - 1em); /* 2 sertifikat per baris */
 		}
 	}
 
@@ -1804,7 +1804,7 @@ input, select, textarea {
 		justify-content: center;
 	}
 		.cert-item {
-			width: 100%; /* Menampilkan 1 sertifikat per baris pada layar lebih kecil */
+			width: 100%; /* 1 sertifikat per baris pada layar lebih kecil */
 		}
 	}
 
@@ -1850,14 +1850,14 @@ input, select, textarea {
 
 		.image.featured {
 			display: block;
-			width: 100%;
-			margin: 0 0 2em 0;
+			width: 75%;
+			margin: 0 auto 2em auto;
 			border-radius: 15px;
 			-webkit-border-radius: 15px;
 			-moz-border-radius: 15px;
 			-ms-border-radius: 15px;
 			-o-border-radius: 15px;
-}
+		}
 
 		.image.left {
 			float: left;
@@ -1875,6 +1875,123 @@ input, select, textarea {
 			}
 
 /* List */
+
+	.other-cert-item {
+		display: block;
+		margin: 1em auto 0 auto;
+	}
+	.other-cert-item h3 {
+		font-size: 1.1em;
+		font-weight: normal;
+	}
+
+	.other-cert-item p {
+		font-size: 0.9em;
+		margin-bottom: 0;
+	}
+
+	.popup {
+		display: none;
+		position: fixed;
+		z-index: 1;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+		background-color: rgba(0, 0, 0, 0.5);
+		animation: fadeIn 0.5s;
+	}
+	
+	.popup-content {
+		background-color: #eaeaea;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		padding: 20px 20px 0 20px;
+		border: 1px solid #ddd;
+		width: 80%;
+		max-width: 80vh; 
+		border-radius: 5px; 
+		box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	}
+	
+	.popup-content h2 {
+		border-bottom: 1px solid #c5c3c3;
+		padding-bottom: 10px;
+		color: #303030; 
+		margin-bottom:10px;
+	}
+
+	.popup-content li{
+		font-size: 20px;
+		color: #575757;
+	}
+	
+	.close {
+		color: #aaa;
+		float: right;
+		font-size: 28px;
+		font-weight: bold;
+		transition: color 0.3s;
+	}
+	
+	.close:hover,
+	.close:focus {
+		color: black;
+		text-decoration: none;
+		cursor: pointer;
+	}
+
+	.other-cert-item a{
+		text-align: center;
+		cursor: pointer;
+	}
+	
+	.other-cert-item a:hover {
+		color: #3461ae;
+		transition: 0.3s; 
+	}
+	
+	
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+	
+	@keyframes slideIn {
+		from {
+			transform: translateY(-50px);
+		}
+		to {
+			transform: translateY(0);
+		}
+	}
+	
+	
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+	
+	@keyframes slideIn {
+		from {
+			transform: translateY(-50px);
+		}
+		to {
+			transform: translateY(0);
+		}
+	}
+	
 
 	ul {
 		list-style: disc;
@@ -2030,7 +2147,7 @@ input, select, textarea {
 		color: #fff !important;
 		text-decoration: none;
 		padding: 0.75em 2.5em 0.75em 2.5em;
-		background-color: #8ebebc;
+		background-color: #7eaeac;
 		border: 0;
 		cursor: pointer;
 		background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15)), url("images/overlay.png");
@@ -2051,12 +2168,35 @@ input, select, textarea {
 			background-color: #9ececc;
 		}
 
-		input[type="button"]:active,
+		/* input[type="button"]:active,
 		input[type="submit"]:active,
 		input[type="reset"]:active,
 		button:active,
 		.button:active {
 			background-color: #7eaeac;
+		} */
+
+		@media screen and (max-width: 768px) {
+			input[type="button"],
+			input[type="submit"],
+			input[type="reset"],
+			button,
+			.button {
+				padding: 0.6em 1.5em 0.6em 1.5em;
+				font-size: 0.9em;
+			}
+			
+		}
+		@media screen and (max-width: 480px) {
+			input[type="button"],
+			input[type="submit"],
+			input[type="reset"],
+			button,
+			.button {
+				padding: 0.4em 1em 0.4em 1em;
+				font-size: 0.8em;
+			}
+			
 		}
 
 /* Item */
@@ -2312,7 +2452,7 @@ input, select, textarea {
 		#main > section {
 			margin: 0;
 			overflow: hidden;
-			padding: 4em 0;
+			padding: 3em 0 3em 0;
 			box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.05), inset 0 0.1em 0.1em 0 rgba(0, 0, 0, 0.025);
 			text-align: center;
 			background-image: url("images/overlay.png");
@@ -2354,6 +2494,7 @@ input, select, textarea {
 
 			#main > section.two {
 				background-color: #f5fafa;
+				padding-bottom: 4em;
 			}
 
 			#main > section.three {
@@ -2407,7 +2548,7 @@ input, select, textarea {
 			}
 
 			#main section.cover {
-				padding: 5em 0;
+				padding: 8em 0;
 			}
 
 	}
@@ -2673,7 +2814,7 @@ input, select, textarea {
 				}
 
 				#main section.cover {
-					padding: 4em 0;
+					padding: 7em 0;
 				}
 
 	}
@@ -2716,7 +2857,7 @@ input, select, textarea {
 			}
 
 			#main section.cover {
-				padding: 4em 0em;
+				padding: 7em 0em;
 			}
 
 				#main section.cover header {
