@@ -2207,7 +2207,7 @@ input, select, textarea {
 		margin-bottom: 40px;
 		justify-content: center;
 	}
-	#img_chatbot{
+	#img_personalchatbot_llm_rag{
 		width:70%;
 		margin:auto;
 	}
