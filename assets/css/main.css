@@ -1,7 +1,7 @@
 @import url("fontawesome-all.min.css");
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,400,600");
 #nav li a {
-    font-size: 0.95em; /* Sesuaikan ukuran sesuai preferensi Anda */
+    font-size: 0.95em;
 }
 
 html, body, div, span, applet, object,
@@ -107,9 +107,19 @@ input, select, textarea {
 		color: #888;
 	}
 
-	h1, h2, h3, h4, h5, h6 {
+	h2.alt {
 		font-weight: 300;
-		color: #666;
+	}
+
+	h3 {
+		font-weight: 400;
+		color: #444;
+		line-height: 1.5em;
+	}
+
+	h1, h4, h5, h6 {
+		font-weight: 300;
+		color: #555;
 		line-height: 1.5em;
 	}
 
@@ -117,9 +127,15 @@ input, select, textarea {
 		color: inherit;
 		text-decoration: none;
 	}
+
+	p {
+		color: #444;
+		font-weight: 300;
+	}
 	
 	.item h3{
-		font-weight:bold;
+		color: #777;
+		font-weight: bold;
 		padding-bottom: 0.5rem;
 		padding:0 15px 10px 15px;
 	}
@@ -129,12 +145,15 @@ input, select, textarea {
 		padding:0 10px 0 10px;
 	}
 
-		h1 a strong, h2 a strong, h3 a strong, h4 a strong, h5 a strong, h6 a strong {
+	h1 a strong, h2 a strong, h3 a strong, h4 a strong, h5 a strong, h6 a strong {
 			color: #333;
 		}
 
 	h2 {
 		font-size: 2em;
+		font-weight: 400;
+		color: #666;
+		line-height: 1.5em;
 		letter-spacing: -1px;
 	}
 
@@ -1912,7 +1931,6 @@ input, select, textarea {
 		transform: translate(-50%, -50%);
 		padding: 20px 20px 0 20px;
 		border: 1px solid #ddd;
-		width: 80%;
 		max-width: 80vh; 
 		border-radius: 5px; 
 		box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -1921,13 +1939,20 @@ input, select, textarea {
 	.popup-content h2 {
 		border-bottom: 1px solid #c5c3c3;
 		padding-bottom: 10px;
-		color: #303030; 
+		color: #666; 
 		margin-bottom:10px;
+		font-weight: normal;
+	}
+
+	#certificate-list {
+		margin-bottom: 2.5rem;
 	}
 
 	.popup-content li{
-		font-size: 20px;
-		color: #575757;
+		padding:0;
+		font-size: 15.5px;
+		color: #444;
+		font-weight: 400;
 	}
 	
 	.close {
