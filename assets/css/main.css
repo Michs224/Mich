@@ -1069,7 +1069,7 @@ input, select, textarea {
 				left: 0;
 				height: 100%;
 				width: 100%;
-				background-color: rgba(0, 0, 0, 0.2);
+				background-color: rgba(0, 0, 0, 0.7);
 			}
 
 			#main > section.one .container {
@@ -1080,7 +1080,7 @@ input, select, textarea {
 			#main > section.one {
 				position: relative;
 				background-color: #81918E;
-				background-image: url("../../images/backg.jpg");
+				background-image: url("../../images/backg2.jpg");
 				background-size: cover;
 				background-position: center;
 				overflow: hidden;
