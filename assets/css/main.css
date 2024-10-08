@@ -160,6 +160,7 @@ input, select, textarea {
 		header > p {
 			font-size: 1.1em;
 			margin: 0.2em 0 0 0;
+			/* color: rgba(255, 255, 255, 0.75); */
 			color :#c0c0c0;
 			font-style: italic;
 		}
@@ -720,9 +721,8 @@ input, select, textarea {
 	}
 
 
-
 /* Button */
-	
+
 	.button.resume{
 		display: inline-block;
 		padding: 0.75em 2em 0.75em 2em;
@@ -736,7 +736,6 @@ input, select, textarea {
 
 
 	.button.resume:hover {
-		text-decoration: none;
 		background-color: #132330; 
 		color: white;
 		outline: 2px solid rgba(255, 255, 255, 0.8);
@@ -745,8 +744,6 @@ input, select, textarea {
 	}
 	
 	
-
-
 	input[type="submit"],
 	input[type="reset"] {
 		position: relative;
@@ -758,17 +755,13 @@ input, select, textarea {
 		background-color: #7eaeac;
 		border: 0;
 		cursor: pointer;
-		background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15)), url("images/overlay.png");
-		background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15)), url("images/overlay.png");
-		background-image: -ms-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15)), url("images/overlay.png");
-		background-image: linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15)), url("images/overlay.png");
 		transition: background-color 0.35s ease-in-out;
 	}
 
 
 		input[type="submit"]:hover,
 		input[type="reset"]:hover{
-			background-color: #9ececc;
+			background-color: #87c4c2;
 		}
 
 
@@ -785,7 +778,7 @@ input, select, textarea {
 			input[type="submit"],
 			input[type="reset"],
 			.button.resume {
-				padding: 0.4em 10em 0.4em 1em;
+				padding: 0.4em 1em 0.4em 1em;
 				font-size: 0.8em;
 			}
 			
@@ -857,9 +850,6 @@ input, select, textarea {
 /* Header */
 
 	#header {
-		display: -moz-flex;
-		display: -webkit-flex;
-		display: -ms-flex;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
@@ -1042,11 +1032,9 @@ input, select, textarea {
 			padding: 3em 0 3em 0;
 			box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.05), inset 0 0.1em 0.1em 0 rgba(0, 0, 0, 0.025);
 			text-align: center;
-			background-image: url("images/overlay.png");
 		}
 
 			#main > section.dark {
-				color: #ddd;
 				color: rgba(255, 255, 255, 0.75);
 			}
 
@@ -1055,12 +1043,12 @@ input, select, textarea {
 				}
 
 				#main > section.dark strong {
-					color: #fff;
+					color: rgba(255, 255, 255, 0.9);
 					border-color: inherit;
 				}
 
 				#main > section.dark a {
-					color: #fff;
+					color: inherit;
 					border-color: inherit;
 				}
 
@@ -1074,9 +1062,28 @@ input, select, textarea {
 				background-position: center center;
 			}
 
+			#main > section.one::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				height: 100%;
+				width: 100%;
+				background-color: rgba(0, 0, 0, 0.2);
+			}
+
+			#main > section.one .container {
+				position: relative;
+				z-index: 2; 
+			}
+
 			#main > section.one {
+				position: relative;
 				background-color: #81918E;
 				background-image: url("../../images/backg.jpg");
+				background-size: cover;
+				background-position: center;
+				overflow: hidden;
 			}
 
 			#main > section.two {
@@ -1258,17 +1265,8 @@ input, select, textarea {
 		/* Header */
 
 			#header {
-				-moz-backface-visibility: hidden;
-				-webkit-backface-visibility: hidden;
-				-ms-backface-visibility: hidden;
 				backface-visibility: hidden;
-				-moz-transform: translateX(-275px);
-				-webkit-transform: translateX(-275px);
-				-ms-transform: translateX(-275px);
 				transform: translateX(-275px);
-				-moz-transition: -moz-transform 0.5s ease;
-				-webkit-transition: -webkit-transform 0.5s ease;
-				-ms-transition: -ms-transform 0.5s ease;
 				transition: transform 0.5s ease;
 				-webkit-overflow-scrolling: touch;
 				display: flex;
@@ -1281,7 +1279,6 @@ input, select, textarea {
 				width: 275px;
 				z-index: 10002;
 				width: 275px;
-				background: #222729 url("images/overlay.png");
 				box-shadow: inset -0.25em 0 0.25em 0 rgba(0, 0, 0, 0.125);
 			}
 
@@ -1307,13 +1304,7 @@ input, select, textarea {
 			}
 
 			#headerToggle {
-				-moz-backface-visibility: hidden;
-				-webkit-backface-visibility: hidden;
-				-ms-backface-visibility: hidden;
 				backface-visibility: hidden;
-				-moz-transition: -moz-transform 0.5s ease;
-				-webkit-transition: -webkit-transform 0.5s ease;
-				-ms-transition: -ms-transform 0.5s ease;
 				transition: transform 0.5s ease;
 				display: block;
 				height: 2.25em;
@@ -1366,23 +1357,14 @@ input, select, textarea {
 					}
 
 			body.header-visible #main {
-				-moz-transform: translateX(275px);
-				-webkit-transform: translateX(275px);
-				-ms-transform: translateX(275px);
 				transform: translateX(275px);
 			}
 
 			body.header-visible #headerToggle {
-				-moz-transform: translateX(275px);
-				-webkit-transform: translateX(275px);
-				-ms-transform: translateX(275px);
 				transform: translateX(275px);
 			}
 
 			body.header-visible #header {
-				-moz-transform: translateX(0);
-				-webkit-transform: translateX(0);
-				-ms-transform: translateX(0);
 				transform: translateX(0);
 			}
 
@@ -1395,13 +1377,7 @@ input, select, textarea {
 		/* Main */
 
 			#main {
-				-moz-backface-visibility: hidden;
-				-webkit-backface-visibility: hidden;
-				-ms-backface-visibility: hidden;
 				backface-visibility: hidden;
-				-moz-transition: -moz-transform 0.5s ease;
-				-webkit-transition: -webkit-transform 0.5s ease;
-				-ms-transition: -ms-transform 0.5s ease;
 				transition: transform 0.5s ease;
 				padding-bottom: 1px;
 				margin-left: 0;
