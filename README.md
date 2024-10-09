@@ -1,1 +1,1 @@
-## Data | AI Enthusiasts
+## AI | ML | Data Enthusiasts
