@@ -96,6 +96,39 @@ input, select, textarea {
 		font-weight: 300;
 	}
 
+	.role-container {
+		display: inline-flex;
+		align-items: center;
+		margin:0.5em 0;
+	}
+	
+	.role-text {
+		font-size: 2.75em;
+		font-weight: bold;
+		color : #fff;
+	}
+	
+	.cursor {
+		font-weight: bold;
+		animation: blink 0.7s infinite;
+		margin-left: 0.15em;
+		font-size: 2.75em; 
+		width: 0.5rem; 
+		height: 0.8em;
+		background-color: #fff;
+	}
+	
+	
+	@keyframes blink {
+		0%, 100% {
+			opacity: 0.6;
+		}
+		50% {
+			opacity: 0;
+		}
+	}
+	
+
 	h3 {
 		font-weight: 400;
 		color: #444;
@@ -117,6 +150,29 @@ input, select, textarea {
 		color: #555;
 		font-weight: 300;
 	}
+
+	.status-label {
+		font-size: 16px;
+		font-weight: bold;
+		color: #777;
+		margin-top: 10px;
+	}
+	
+	.status {
+		font-size: 16px;
+		font-weight: bold;
+		display: inline-block;
+	}
+	
+	/* Warna status */
+	.in-progress {
+		color: #ffac07; 
+	}
+	
+	.finished {
+		color: #3cbfcb;
+	}
+	
 	
 	.item h3{
 		color: #777;
@@ -159,7 +215,7 @@ input, select, textarea {
 
 		header > p {
 			font-size: 1.1em;
-			margin: 0.2em 0 0 0;
+			margin: 0;
 			/* color: rgba(255, 255, 255, 0.75); */
 			color :#c0c0c0;
 			font-style: italic;
@@ -453,6 +509,7 @@ input, select, textarea {
 /* Image */
 
 	.image {
+		position: relative;
 		display: inline-block;
 		border: 0;
 	}
@@ -460,6 +517,8 @@ input, select, textarea {
 		.image img {
 			display: block;
 			width: 100%;
+			height: auto;
+			border-radius: 10px 10px 0 0;
 		}
 
 		.image.avatar48 {
@@ -481,15 +540,14 @@ input, select, textarea {
 		.three img{
 			margin-left: auto;
 			margin-right: auto;
-			border-radius: 30px;
-			width:90%;
+			border-radius: 0.7em;
+			width: 50%;
+			box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5);
 		}
 
 		.image.featured {
 			display: block;
-			width: 75%;
 			margin: 0 auto 2em auto;
-			border-radius: 15px;
 		}
 
 		.image.left {
@@ -506,6 +564,16 @@ input, select, textarea {
 				margin: 0 auto;
 				width: auto;
 			}
+
+		.overlay-others {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: rgba(0, 0, 0, 0.5);
+			pointer-events: none;
+		}
 
 /* List */
 
@@ -736,7 +804,7 @@ input, select, textarea {
 
 
 	.button.resume:hover {
-		background-color: #132330; 
+		background-color: #131b22; 
 		color: white;
 		outline: 2px solid rgba(255, 255, 255, 0.8);
 		cursor: pointer;
@@ -786,7 +854,17 @@ input, select, textarea {
 
 /* Item */
 
+	.item a, .cert-image{
+		/* background-color: transparent; */
+		transition: transform 0.5s ease;
+	}
+
+	.item a:hover, .cert-image:hover {
+		transform: scale(1.02);
+	}
+
 	.item {
+		border-radius: 10px 10px 10px 10px;
 		box-shadow: 0 0.05em 0.15em 0 rgba(0, 0, 0, 0.05);
 		margin-bottom: 40px;
 		justify-content: center;
@@ -798,6 +876,7 @@ input, select, textarea {
 	}
 
 		.item header {
+			border-radius: 0 0 10px 10px;
 			background: #fff;
 			margin: 0;
 			padding: 1em 0 1em 0;
@@ -1405,6 +1484,15 @@ input, select, textarea {
 
 			body, input, textarea, select {
 				font-size: 15pt;
+			}
+			
+			.role-text, .cursor{
+				font-size: 2.5em;
+			}
+
+			.cursor{
+				width: 0.4rem;
+				height: 0.8em;
 			}
 
 			h2 {
