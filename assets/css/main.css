@@ -441,7 +441,6 @@ input, select, textarea {
 		margin-bottom: 1em;
 	}
 
-	/* Responsiveness */
 	@media (max-width: 1024px) {
 		.cert-grid {
 			justify-content: center;
