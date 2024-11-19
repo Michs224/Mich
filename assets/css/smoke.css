@@ -40,53 +40,35 @@ section {
     height: 100%;
 }
 
-.head1 {
-    position: relative;
-    transform: translateY(-50%);
-    align-items: center;
-    text-align: center;
-    letter-spacing: 0.7rem;
-    line-height: 30%;
-    color: #f5f5f5;
-    font-size: 4vw;
-    font-style: italic;
-    font-family: "Kanit", "Lucida Sans Regular", "Lucida Grande",
-        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-    justify-content: center;
-    left: 10px;
-    font-weight: 600;
-    margin-bottom: 0;
-}
-.head2 {
-    position: relative;
-    transform: translateY(-50%);
-    align-items: center;
-    text-align: center;
-    letter-spacing: 0.7rem;
-    line-height: 0%;
-    color: #f5f5f5;
-    font-size: 4vw;
-    font-family: "Kanit", "Lucida Sans Regular", "Lucida Grande",
-        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-    justify-content: center;
-    left: 10px;
-    font-weight: 600;
-    font-style: italic;
-    line-height: 20%;
-}
-
 .head1,
 .head2 {
+    position: relative;
+    transform: translateY(-50%);
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.7rem;
+    color: #f5f5f5;
+    font-style: italic;
+    font-size: 4vw;
+    font-family: "Kanit", "Lucida Sans Regular", "Lucida Grande",
+        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+    justify-content: center;
+    left: 10px;
+    font-weight: 600;
     opacity: 0;
 }
 
 .head1 {
+    margin-bottom: 0;
+    line-height: 30%;
     animation: fadeIn 1.5s forwards 0.1s;
 }
-
 .head2 {
+    font-style: italic;
+    line-height: 20%;
     animation: fadeIn 1.5s forwards 0.5s;
 }
+
 
 @keyframes fadeIn {
     0% {
@@ -116,27 +98,44 @@ section {
 }
 @media (max-width: 1280px) {
     .container {
-        --uib-size: 60px;
+        --uib-size: 70px;
     }
+    /* .head1, .head2 {
+        font-size: 5vw;
+    } */
 }
 @media (max-width: 1100px) {
     .container {
-        --uib-size: 60px;
+        --uib-size: 70px;
     }
+    /* .head1, .head2 {
+        font-size: 5vw;
+    } */
 }
 @media (max-width: 768px) {
     .container {
-        --uib-size: 50px;
+        --uib-size: 65px;
+    }
+    .head1, .head2 {
+        font-size: 6vw;
     }
 }
 @media (max-width: 540px) {
     .container {
-        --uib-size: 45px;
+        --uib-size: 60px;
+    }
+
+    .head1, .head2 {
+        font-size: 8vw;
     }
 }
 @media (max-width: 480px) {
     .container {
-        --uib-size: 40px;
+        --uib-size: 55px;
+    }
+
+    .head1, .head2 {
+        font-size: 10vw;
     }
 }
 
