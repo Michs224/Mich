@@ -427,7 +427,7 @@ input, select, textarea {
 		max-width: 90%;
 		height: auto;
 		margin-bottom: 1em;
-		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+		box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.4);
 	}
 
 	.cert-item h3 {
@@ -542,7 +542,7 @@ input, select, textarea {
 			margin-right: auto;
 			border-radius: 0.7em;
 			width: 60%;
-			box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5);
+			box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.4);
 		}
 
 		.image.featured {
@@ -865,15 +865,15 @@ input, select, textarea {
 
 	.item {
 		border-radius: 10px 10px 10px 10px;
-		box-shadow: 0 0.05em 0.15em 0 rgba(0, 0, 0, 0.05);
+		box-shadow: 0 0.05em 0.2em 0 rgba(0, 0, 0, 0.1);
 		margin-bottom: 40px;
 		justify-content: center;
 	}
 
-	#img_personalchatbot_llm_rag{
-		width:70%;
+	/* #img_personal_medicalchatbot_llm_rag{
+		width:100%;
 		margin:auto;
-	}
+	} */
 
 		.item header {
 			border-radius: 0 0 10px 10px;
