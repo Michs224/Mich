@@ -31,13 +31,19 @@ section {
     overflow: hidden;
 }
 
+.UI {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 .ui1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: auto;
+    /* margin: auto; */
     flex-direction: column;
-    height: 100%;
+    /* height: 100%; */
 }
 
 .head1,
@@ -52,14 +58,12 @@ section {
     font-size: 4vw;
     font-family: "Kanit", "Lucida Sans Regular", "Lucida Grande",
         "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-    justify-content: center;
-    left: 10px;
     font-weight: 600;
     opacity: 0;
 }
 
 .head1 {
-    margin-bottom: 0;
+    margin-top: auto;
     line-height: 30%;
     animation: fadeIn 1.5s forwards 0.1s;
 }
