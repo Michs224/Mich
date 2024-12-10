@@ -1468,13 +1468,13 @@ input, select, textarea {
 
 		/* Basic */
 
-			#logo .image{
+			/* #logo .image{
 				margin-left: 10px;
-			}
+			} */
 
-			body, input, textarea, select {
+			/* body, input, textarea, select {
 				font-size: 15pt;
-			}
+			} */
 			
 			.role-text, .cursor{
 				font-size: 2.5em;
@@ -1496,10 +1496,10 @@ input, select, textarea {
 
 		/* List */
 
-			ul.icons a {
+			/* ul.icons a {
 				width: 2em;
 				font-size: 1.25em;
-			}
+			} */
 
 		/* Main */
 
