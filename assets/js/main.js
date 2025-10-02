@@ -159,3 +159,8 @@ function openPopup() {
 function closePopup() {
     document.getElementById("popup").style.display = "none";
 }
+
+// Toggle Experience Timeline Details
+function toggleDetails(element) {
+    element.classList.toggle('active');
+}
