@@ -530,6 +530,12 @@ input, select, textarea {
     margin-bottom: 30px;
     cursor: pointer;
     transition: transform 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .timeline-item:hover {
@@ -578,6 +584,7 @@ input, select, textarea {
     border-radius: 10px;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .timeline-content:hover {
