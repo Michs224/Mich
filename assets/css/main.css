@@ -593,8 +593,9 @@ input, select, textarea {
 
 .timeline-header h3 {
     font-size: 1.2em;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     color: #2c3e50;
+	line-height: 1em;
 }
 
 .timeline-header .company {
@@ -603,6 +604,7 @@ input, select, textarea {
     color: #4a90e2;
     margin-bottom: 5px;
     font-size: 0.95em;
+	line-height: 1em;
 }
 
 .timeline-header .date {
