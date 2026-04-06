@@ -1379,6 +1379,7 @@ input, select, textarea {
 				background-image: url("../../images/backg2.jpg");
 				background-size: cover;
 				background-position: center;
+				background-attachment: fixed;
 				overflow: hidden;
 			}
 
@@ -1685,6 +1686,10 @@ input, select, textarea {
 
 				#main section.cover {
 					padding: 7em 0;
+				}
+
+				#main > section.one {
+					background-attachment: scroll;
 				}
 
 	}
