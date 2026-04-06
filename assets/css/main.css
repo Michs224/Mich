@@ -815,33 +815,10 @@ input, select, textarea {
 			width: 100%;
 		}
 
-		.three img{
-			margin-left: auto;
-			margin-right: auto;
-			border-radius: 0.7em;
-			width: 60%;
-			box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.4);
-		}
-
 		.image.featured {
 			display: block;
 			margin: 0 auto 2em auto;
 		}
-
-		.image.left {
-			float: left;
-			margin: 0 2em 2em 0;
-		}
-
-		.image.centered {
-			display: block;
-			margin: 0 0 2em 0;
-		}
-
-			.image.centered img {
-				margin: 0 auto;
-				width: auto;
-			}
 
 /* List */
 
@@ -947,26 +924,7 @@ input, select, textarea {
 			transform: translateY(0);
 		}
 	}
-	
-	
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
-	
-	@keyframes slideIn {
-		from {
-			transform: translateY(-50px);
-		}
-		to {
-			transform: translateY(0);
-		}
-	}
-	
+
 
 	ul {
 		list-style: disc;
@@ -975,15 +933,6 @@ input, select, textarea {
 
 		ul li {
 			padding-left: 0.5em;
-		}
-
-	ol {
-		list-style: decimal;
-		padding-left: 1.25em;
-	}
-
-		ol li {
-			padding-left: 0.25em;
 		}
 
 /* Icons */
