@@ -111,32 +111,17 @@
 									<div class="timeline-marker"></div>
 									<div class="timeline-content">
 										<div class="timeline-header">
-											<h3>AI Engineer</h3>
+											<h3 style="margin-bottom: 4px;">AI Engineer <span style="font-weight: 400; font-style: italic; font-size: 0.7em; color: #7f8c8d; white-space: nowrap;">12/2025 – Present</span></h3>
+											<h3 style="margin-bottom: 4px;">AI Engineer – Intern <span style="font-weight: 400; font-style: italic; font-size: 0.7em; color: #7f8c8d; white-space: nowrap;">02/2025 – 11/2025</span></h3>
 											<span class="company">Maknadata</span>
-											<span class="date">12/2025 – Present</span>
 										</div>
 										<div class="timeline-details">
 											<ul>
-												<li>Developed agentic AI system—RAG, text-to-SQL, etc.—to answer domain-specific questions.</li>
-												<li>Built backend services using FastAPI and PostgreSQL and containerized applications with Docker.</li>
-												<li>Analyzed business use cases to identify opportunities for AI-driven solutions.</li>
-											</ul>
-										</div>
-									</div>
-								</div>
-
-								<div class="timeline-item" onclick="toggleDetails(this)">
-									<div class="timeline-marker"></div>
-									<div class="timeline-content">
-										<div class="timeline-header">
-											<h3>AI Engineer</h3>
-											<span class="company">Maknadata - Intern</span>
-											<span class="date">02/2025 – 11/2025</span>
-										</div>
-										<div class="timeline-details">
-											<ul>
-												<li>Developed agentic AI system—RAG, text-to-SQL, etc.—to answer domain-specific questions.</li>
-												<li>Built backend services using FastAPI and PostgreSQL and containerized applications with Docker.</li>
+												<li>Developing a real-time conversational AI voice agent for sales roleplay training, building a cascaded voice pipeline (ASR → LLM → TTS) from scratch.</li>
+												<li>Researching and benchmarking proprietary and open-source speech/language models to evaluate cost-efficiency and self-hosting feasibility, reducing dependency on third-party APIs.</li>
+												<li>Implemented logging and monitoring (observability) for a compliance audit backend service.</li>
+												<li>Developed an automated system that merges draft reports and interview transcripts using LLMs, streamlining document integration and enhancing workflow efficiency.</li>
+												<li>Built AI Agent (Agentic AI) system (RAG, text-to-SQL, etc.) with FastAPI and PostgreSQL backends, containerized using Docker.</li>
 												<li>Analyzed business use cases to identify opportunities for AI-driven solutions.</li>
 											</ul>
 										</div>
@@ -229,6 +214,34 @@
 
 								<div class="col-4 col-12-mobile">
 									<article class="item">
+										<a class="image fit"><img src="images/AIVoiceAgent.png" alt="img_voice_agent"/></a>
+										<header>
+											<h3 style="font-size: 18.5px;">AI Voice Agent (Sales Roleplay)</h3>
+											<div class="tech-stack">
+												<span>AI Voice Agent</span>
+												<span>ASR</span>
+												<span>TTS</span>
+												<span>LLM</span>
+												<span>Real-time</span>
+												<span>Pipecat</span>
+												<span>LiveKit</span>
+												<span>vLLM</span>
+												<span>SGLang</span>
+												<span>Self-hosted</span>
+											</div>
+											<span class="status-label">Status:</span>
+											<span class="status in-progress">In Progress</span>
+											<h4>Real-time voice agent that helps sales representatives practice with an AI customer persona.
+												It uses a cascaded voice pipeline (ASR → LLM → TTS) being built from scratch to enable natural spoken dialogue.
+												Both proprietary and open-source speech/language models are being researched and benchmarked to evaluate
+												cost-efficiency and self-hosting feasibility, reducing dependency on third-party APIs.
+											</h4>
+										</header>
+									</article>
+								</div>
+
+								<div class="col-4 col-12-mobile">
+									<article class="item">
 										<a class="image fit"><img src="images/Agentic.png" alt="img_agentic"/></a>
 										<header>
 											<h3 style="font-size: 18.5px;">Agentic CoMRS (Conversational Multi-Retrieval System)</h3>
@@ -246,9 +259,9 @@
 												<span>Gemini</span>
 											</div>
 											<span class="status-label">Status:</span>
-											<span class="status in-progress">In Progress</span>
-											<h4>Agentic CoMRS is a conversational agentic system that enables users to interact with multiple data sources through natural language. 
-												The system integrates RAG (Retrieval-Augmented Generation) for document-based queries, text-to-SQL for database operations (e.g., checking product stock), 
+											<span class="status finished">Finished</span>
+											<h4>Agentic CoMRS is a conversational agentic system that enables users to interact with multiple data sources through natural language.
+												The system integrates RAG (Retrieval-Augmented Generation) for document-based queries, text-to-SQL for database operations (e.g., checking product stock),
 												and web search capabilities for real-time information retrieval. Users can seamlessly ask questions about products from various sources—documents, databases, or the web—
 												and the agent automatically routes queries to the appropriate retrieval method.
 											</h4>

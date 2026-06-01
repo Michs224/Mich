@@ -508,7 +508,7 @@ input, select, textarea {
 /* Experience Section - Timeline */
 .timeline {
     position: relative;
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px 0;
 }
@@ -578,7 +578,7 @@ input, select, textarea {
 }
 
 .timeline-content {
-    width: 45%;
+    width: 48%;
     background: #f8f9fa;
     padding: 20px;
     border-radius: 10px;
@@ -623,7 +623,7 @@ input, select, textarea {
 }
 
 .timeline-item.active .timeline-details {
-    max-height: 500px;
+    max-height: 1300px;
 }
 
 .timeline-details ul {
