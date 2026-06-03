@@ -506,9 +506,14 @@ input, select, textarea {
 }
 
 /* Experience Section - Timeline */
+#experience .container {
+    width: 100%;
+    max-width: 1300px;
+}
+
 .timeline {
     position: relative;
-    max-width: 1200px;
+    max-width: 1300px;
     margin: 0 auto;
     padding: 20px 0;
 }
@@ -543,17 +548,15 @@ input, select, textarea {
 }
 
 .timeline-item:nth-child(odd) .timeline-content {
-    margin-left: auto;
-    margin-right: 0;
+    margin-left: calc(50% + 30px);
+    margin-right: auto;
     text-align: left;
-    padding-left: 40px;
 }
 
 .timeline-item:nth-child(even) .timeline-content {
-    margin-right: auto;
-    margin-left: 0;
+    margin-right: calc(50% + 30px);
+    margin-left: auto;
     text-align: right;
-    padding-right: 40px;
 }
 
 .timeline-marker {
@@ -578,13 +581,28 @@ input, select, textarea {
 }
 
 .timeline-content {
-    width: 48%;
+    width: calc(50% - 60px);
     background: #f8f9fa;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+    cursor: pointer;
+}
+
+/* Pointer over the card chrome (clickable to expand/collapse),
+   but text cursor over the actual copyable text */
+.timeline-content h3,
+.timeline-content h4,
+.timeline-content p,
+.timeline-content span,
+.timeline-content li {
+    cursor: text;
 }
 
 .timeline-content:hover {
@@ -639,11 +657,11 @@ input, select, textarea {
     color: #555;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .timeline::before {
         left: 30px;
     }
-    
+
     .timeline-item:nth-child(odd) .timeline-content,
     .timeline-item:nth-child(even) .timeline-content {
         width: calc(100% - 80px);
@@ -654,11 +672,11 @@ input, select, textarea {
         padding-left: 20px;
         padding-right: 15px;
     }
-    
+
     .timeline-marker {
         left: 30px;
     }
-    
+
     .timeline-header h3 {
         font-size: 1em;
     }

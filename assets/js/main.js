@@ -162,5 +162,10 @@ function closePopup() {
 
 // Toggle Experience Timeline Details
 function toggleDetails(element) {
+    // Don't collapse/expand while the user is selecting text, so content stays copyable
+    var selection = window.getSelection && window.getSelection();
+    if (selection && selection.toString().length > 0) {
+        return;
+    }
     element.classList.toggle('active');
 }
