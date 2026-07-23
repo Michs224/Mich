@@ -1,0 +1,228 @@
+/* ============================================================
+   enhance.css — modern interactivity layer (additive)
+   Keeps the original light theme; adds motion & polish only.
+   ============================================================ */
+
+/* ---- Scroll progress bar ---- */
+#scrollProgress {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 3px;
+	width: 0;
+	background: linear-gradient(90deg, #05406e 0%, #6f9e9c 100%);
+	z-index: 10050;
+	transition: width 0.1s linear;
+	pointer-events: none;
+}
+
+/* ---- Scroll reveal ---- */
+.reveal {
+	opacity: 0;
+	transform: translateY(28px);
+	transition: opacity 0.7s cubic-bezier(0.22, 0.7, 0.2, 1),
+	            transform 0.7s cubic-bezier(0.22, 0.7, 0.2, 1);
+	will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+	opacity: 1;
+	transform: none;
+}
+
+/* ---- Back to top button ---- */
+#backToTop {
+	position: fixed;
+	right: 1.5em;
+	bottom: 1.5em;
+	width: 3em;
+	height: 3em;
+	border-radius: 50%;
+	border: 0;
+	cursor: pointer;
+	background: #222629;
+	color: #fff;
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(14px) scale(0.9);
+	transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease, background 0.3s ease;
+	z-index: 10040;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1em;
+}
+
+#backToTop.visible {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0) scale(1);
+}
+
+#backToTop:hover {
+	background: #6f9e9c;
+	transform: translateY(-3px) scale(1.05);
+}
+
+#backToTop .icon:before {
+	font-size: 1.1em;
+}
+
+/* ---- Project card hover lift + clipped image zoom ---- */
+.item {
+	overflow: hidden;
+	transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.item:hover {
+	transform: translateY(-6px);
+	box-shadow: 0 16px 36px rgba(0, 0, 0, 0.14);
+}
+
+/* ---- Certificate card hover ---- */
+.cert-item {
+	transition: transform 0.35s ease;
+	border-radius: 8px;
+}
+
+.cert-item:hover {
+	transform: translateY(-5px);
+}
+
+.cert-image {
+	transition: transform 0.4s ease, box-shadow 0.35s ease;
+}
+
+.cert-item:hover .cert-image {
+	box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.28);
+}
+
+/* ---- Achievement item hover ---- */
+.achievement-item {
+	transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.achievement-item:hover {
+	transform: translateX(6px);
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+}
+
+/* ---- Tech-stack pill micro-interaction ---- */
+.tech-stack span {
+	transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+	cursor: default;
+}
+
+.tech-stack span:hover {
+	background-color: #e7edf2;
+	color: #055092;
+	border-color: #a9bccd;
+}
+
+/* ---- Nav active accent bar ---- */
+#nav ul li a {
+	position: relative;
+}
+
+#nav ul li a:before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 3px;
+	height: 0;
+	background: #6f9e9c;
+	transition: height 0.3s ease;
+	border-radius: 0 2px 2px 0;
+}
+
+#nav ul li a.active:before {
+	height: 70%;
+}
+
+/* ---- Profile avatar subtle ring on hover ---- */
+#logo .image.avatar48 {
+	transition: box-shadow 0.35s ease;
+	border-radius: 50%;
+}
+
+#logo:hover .image.avatar48 {
+	box-shadow: 0 0 0 3px rgba(111, 158, 156, 0.55);
+}
+
+/* ---- Hero CTAs: primary (resume) + secondary (get in touch) ---- */
+.hero-actions {
+	display: flex;
+	gap: 0.8em;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+/* Consistent text weight so only color/background animate on hover
+   (font-weight can't tween smoothly — it snaps mid-transition and
+   reads as a delayed bolding). Keep both states equal. */
+.button.resume,
+.button.contact {
+	font-weight: 400;
+}
+
+.button.resume {
+	transition: all 0.35s ease;
+}
+
+.button.resume:hover {
+	transform: translateY(-2px);
+	font-weight: 400;
+}
+
+.button.contact {
+	display: inline-block;
+	padding: 0.75em 2em 0.75em 2em;
+	border: 1px solid;
+	border-radius: 5px;
+	background-color: transparent;
+	text-decoration: none;
+	font-size: 1em;
+	transition: all 0.35s ease;
+}
+
+.button.contact:hover {
+	background-color: #131b22;
+	color: #fff;
+	outline: 2px solid rgba(255, 255, 255, 0.8);
+	transform: translateY(-2px);
+	cursor: pointer;
+}
+
+@media screen and (max-width: 480px) {
+	.button.contact {
+		padding: 0.4em 1em 0.4em 1em;
+		font-size: 0.8em;
+	}
+}
+
+/* ---- Respect reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+	.reveal {
+		opacity: 1 !important;
+		transform: none !important;
+		transition: none !important;
+	}
+
+	#scrollProgress {
+		transition: none;
+	}
+}
+
+/* ---- Mobile tweaks ---- */
+@media screen and (max-width: 736px) {
+	#backToTop {
+		right: 1em;
+		bottom: 1em;
+		width: 2.7em;
+		height: 2.7em;
+	}
+}
