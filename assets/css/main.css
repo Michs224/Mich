@@ -1406,7 +1406,7 @@ input, select, textarea {
 			#main > section.one {
 				position: relative;
 				background-color: #81918E;
-				background-image: url("../../images/backg2.jpg");
+				background-image: url("../../images/backg2.webp");
 				background-size: cover;
 				background-position: center;
 				background-attachment: fixed;
