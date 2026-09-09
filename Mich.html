@@ -124,10 +124,13 @@
 										<div class="timeline-details">
 											<ul>
 												<li>Developing a real-time conversational AI voice agent for sales roleplay training, building a cascaded voice pipeline (ASR → LLM → TTS) from scratch.</li>
+												<li>Implemented LLM tool calling to control each conversation turn, grounding responses in scenario facts through Qdrant vector retrieval (Vertex AI embeddings).</li>
+												<li>Built a multimodal LLM-as-judge pipeline scoring recorded sales conversations against a versioned rubric.</li>
+												<li>Built AI Agent (Agentic AI) system (RAG, text-to-SQL, etc.) with FastAPI and PostgreSQL backends, containerized using Docker.</li>
 												<li>Researching and benchmarking proprietary and open-source speech/language models to evaluate cost-efficiency and self-hosting feasibility, reducing dependency on third-party APIs.</li>
+												<li>Architected backends as layered DDD services with enforced module boundaries, and dispatched long-running evaluation jobs to Cloud Tasks workers on Cloud Run.</li>
 												<li>Implemented logging and monitoring (observability) for a compliance audit backend service.</li>
 												<li>Developed an automated system that merges draft reports and interview transcripts using LLMs, streamlining document integration and enhancing workflow efficiency.</li>
-												<li>Built AI Agent (Agentic AI) system (RAG, text-to-SQL, etc.) with FastAPI and PostgreSQL backends, containerized using Docker.</li>
 												<li>Analyzed business use cases to identify opportunities for AI-driven solutions.</li>
 											</ul>
 										</div>
@@ -235,6 +238,8 @@
 												<span>vLLM</span>
 												<span>SGLang</span>
 												<span>Self-hosted</span>
+												<span>Vertex AI</span>
+												<span>Qdrant</span>
 											</div>
 											<span class="status-label">Status:</span>
 											<span class="status in-progress">In Progress</span>
@@ -242,6 +247,33 @@
 												It uses a cascaded voice pipeline (ASR → LLM → TTS) being built from scratch to enable natural spoken dialogue.
 												Both proprietary and open-source speech/language models are being researched and benchmarked to evaluate
 												cost-efficiency and self-hosting feasibility, reducing dependency on third-party APIs.
+											</h4>
+										</header>
+									</article>
+								</div>
+
+								<div class="col-4 col-12-mobile">
+									<article class="item">
+										<a class="image fit"><img src="images/VisionQC.png" alt="img_linknet_vision_qc"/></a>
+										<header>
+											<h3 style="font-size: 18.5px;">LinkNet Vision QC (POC)</h3>
+											<div class="tech-stack">
+												<span>VLM</span>
+												<span>Computer Vision</span>
+												<span>Qwen3-VL</span>
+												<span>vLLM</span>
+												<span>AWS Bedrock</span>
+												<span>Vertex AI</span>
+												<span>OpenCV</span>
+												<span>Self-hosted</span>
+											</div>
+											<span class="status-label">Status:</span>
+											<span class="status finished">Finished</span>
+											<h4>Vision LLM system auditing FTTH field installation photos against audit category standards for an Indonesian ISP.
+												Achieved 83.6% overall accuracy and 85.5% defect recall on a benchmark of 286 photos. Open and closed VLMs were benchmarked
+												behind a modular provider layer (Qwen3-VL on self-hosted vLLM, Claude/Kimi K2.5/Nova via AWS Bedrock, Gemini via Vertex AI),
+												and self-hosted Qwen3-VL-32B was selected to meet data residency constraints. An OpenCV quality gate filters unusable photos
+												before any LLM call.
 											</h4>
 										</header>
 									</article>
@@ -471,7 +503,8 @@
 											<span class="status finished">Finished</span>
 											<h4>These are assignments from a course in the Coursera Machine Learning Specialization,
 												which involve implementing collaborative filtering and content-based filtering recommender systems using techniques such as matrix factorization and neural networks.
-										</header>
+										</h4>
+											</header>
 									</article>
 								</div>
 
