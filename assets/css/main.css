@@ -231,6 +231,32 @@ input, select, textarea {
 			color: #c0392b;
 	}
 
+	#msg.sending{
+			color: #666;
+			font-weight: normal;
+			font-size: 16px;
+	}
+
+	.spinner {
+			display: inline-block;
+			width: 14px;
+			height: 14px;
+			margin-right: 8px;
+			vertical-align: -2px;
+			border: 2px solid rgba(2, 136, 113, 0.25);
+			border-top-color: #028871;
+			border-radius: 50%;
+			animation: spin 0.7s linear infinite;
+	}
+
+	@keyframes spin {
+			to { transform: rotate(360deg); }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+			.spinner { animation-duration: 2s; }
+	}
+
 	form input[type="submit"][disabled] {
 			opacity: 0.6;
 			cursor: progress;

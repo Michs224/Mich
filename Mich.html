@@ -917,14 +917,15 @@
 
 				  submitBtn.disabled = true
 				  submitBtn.value = 'Sending...'
-				  msg.className = ''
-				  msg.innerHTML = ''
+				  msg.className = 'sending'
+				  msg.innerHTML = '<span class="spinner"></span>Sending your message...'
 
 				  fetch(scriptURL, { method: 'POST', body: new FormData(form)})
 					.then(function(){
 						// Apps Script menjalankan script-nya lalu me-redirect ke URL respons.
 						// URL respons itu sering 404 untuk akses anonim, padahal datanya sudah
 						// tersimpan. Jadi resolve = terkirim; hanya error jaringan yang gagal.
+						msg.className = ''
 						msg.innerHTML = 'Message sent successfully'
 						form.reset()
 						setTimeout(function(){
