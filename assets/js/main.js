@@ -116,7 +116,7 @@
 
 })(jQuery);
 
-const roles = ["Data Scientist", "ML Engineer", "AI Engineer"];
+const roles = ["AI Engineer", "ML Engineer", "Data Scientist"];
 let roleIndex = 0;
 let charIndex = 0;
 let currentRole = "";
