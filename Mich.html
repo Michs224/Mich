@@ -909,17 +909,37 @@
 				const form = document.forms['submit-to-google-sheet']
 				const msg=document.getElementById("msg")
 
+				const submitBtn = form.querySelector('input[type="submit"]')
+				const submitLabel = submitBtn.value
+
 				form.addEventListener('submit', e => {
 				  e.preventDefault()
+
+				  submitBtn.disabled = true
+				  submitBtn.value = 'Sending...'
+				  msg.className = ''
+				  msg.innerHTML = ''
+
 				  fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-					.then(response => {
-						msg.innerHTML="Message sent successfully"
-						setTimeout(function(){
-							msg.innerHTML=""
-						},5000)
+					.then(function(){
+						// Apps Script menjalankan script-nya lalu me-redirect ke URL respons.
+						// URL respons itu sering 404 untuk akses anonim, padahal datanya sudah
+						// tersimpan. Jadi resolve = terkirim; hanya error jaringan yang gagal.
+						msg.innerHTML = 'Message sent successfully'
 						form.reset()
+						setTimeout(function(){
+							msg.innerHTML = ''
+						},5000)
 					})
-					.catch(error => console.error('Error!', error.message))
+					.catch(error => {
+						console.error('Error!', error.message)
+						msg.className = 'error'
+						msg.innerHTML = 'Failed to send. Please try again, or email me at michaelwjy2@gmail.com'
+					})
+					.finally(function(){
+						submitBtn.disabled = false
+						submitBtn.value = submitLabel
+					})
 				})
 			</script>
 
