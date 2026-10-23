@@ -1,0 +1,62 @@
+# [cek] The CV dates the IBM and CFI certificates 2022; the old site says August 2023. Old site kept until the owner confirms.
+- id: ml-specialization
+  title: Machine Learning Specialization
+  issuer: DeepLearning.AI, Stanford University
+  date: 2024-11
+  url: https://www.coursera.org/account/accomplishments/specialization/67GY60TM241Y
+- id: unsupervised-learning
+  title: Unsupervised Learning, Recommenders, Reinforcement Learning
+  issuer: DeepLearning.AI, Stanford University
+  date: 2024-11
+  url: https://www.coursera.org/account/accomplishments/records/NW66BOS2DU70
+- id: nvidia-transformer-nlp
+  title: Building Transformer-Based Natural Language Processing Applications
+  issuer: NVIDIA
+  date: 2024-10
+  url: https://learn.nvidia.com/certificates?id=DCYZJIuHS6-TgXYat1LLZQ
+- id: advanced-learning-algorithms
+  title: Advanced Learning Algorithms
+  issuer: DeepLearning.AI, Stanford University
+  date: 2024-06
+  url: https://www.coursera.org/account/accomplishments/records/P11LUARQXF9M
+- id: supervised-ml
+  title: "Supervised Machine Learning: Regression and Classification"
+  issuer: DeepLearning.AI
+  date: 2024-06
+- id: asean-dse-enablement
+  title: "ASEAN Data Science Explorers 2024 Enablement Session: SAP Analytics Cloud and SAP Build Apps"
+  issuer: ASEAN Foundation, SAP
+  date: 2024-04
+- id: skilvul-advanced-python
+  title: Advanced Python
+  issuer: Skilvul
+  date: 2024-03
+- id: skilvul-algorithms
+  title: Algorithm & Data Structures with Python
+  issuer: Skilvul
+  date: 2024-03
+- id: cfi-dsml
+  title: Data Science and Machine Learning Fundamentals
+  issuer: Corporate Finance Institute (CFI)
+  date: 2023-08
+  url: https://credentials.corporatefinanceinstitute.com/ad7ad53d-36b2-434e-a690-2d3dfdadb410
+- id: cfi-statistics
+  title: Statistics Fundamentals
+  issuer: Corporate Finance Institute (CFI)
+  date: 2023-08
+  url: https://credentials.corporatefinanceinstitute.com/faf7baa6-bc9b-4c6e-b37f-4f92136c3ebd
+- id: ibm-ml-python
+  title: Machine Learning with Python
+  issuer: IBM
+  date: 2023-08
+  url: https://www.credly.com/badges/44545761-5785-4e51-9374-67bc1714b7b1/public_url
+- id: ibm-python-ds
+  title: Python for Data Science
+  issuer: IBM
+  date: 2023-08
+  url: https://www.credly.com/badges/c11ae0e1-cfd3-4f1a-b01b-f6ac110a1a3e/public_url
+- id: ibm-data-analysis
+  title: Data Analysis using Python
+  issuer: IBM
+  date: 2023-08
+  url: https://www.credly.com/badges/f63f6057-9696-4a6e-a816-eeb5dcb2a5d6/public_url

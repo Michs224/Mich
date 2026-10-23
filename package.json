@@ -1,0 +1,33 @@
+{
+  "name": "michgerald",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Portfolio of Michael Geraldin Wijaya, AI engineer",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "test:e2e": "playwright test",
+    "budget": "node scripts/check-budget.mjs",
+    "lh": "node scripts/lighthouse.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@phosphor-icons/core": "^2.1.1",
+    "astro": "^7.4.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.11",
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^24.19.2",
+    "lighthouse": "^13.5.0",
+    "sharp": "^0.35.5",
+    "typescript": "^6.0.3"
+  }
+}

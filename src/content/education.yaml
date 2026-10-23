@@ -1,0 +1,19 @@
+- id: binus-mcs
+  school: Bina Nusantara University
+  degree: Master of Computer Science
+  start: "2025"
+  end: present
+  focus: Data Science
+  gpa: 4.00 (latest)
+  order: 1
+
+- id: binus-bcs
+  school: Bina Nusantara University
+  degree: Bachelor of Computer Science
+  start: "2022"
+  end: "2025"
+  focus: Intelligent System
+  gpa: "3.96"
+  honors:
+    - Dean’s List
+  order: 2

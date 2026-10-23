@@ -1,0 +1,185 @@
+---
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import { site } from '../../data/site';
+
+const links = [
+  { href: '/#projects', label: 'Projects' },
+  { href: '/#experience', label: 'Experience' },
+  { href: '/#about', label: 'About' },
+  { href: '/#contact', label: 'Contact' },
+];
+---
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="wordmark" href="/#top" translate="no">{site.name}</a>
+
+    <nav class="nav-wide" aria-label="Main">
+      <ul>
+        {links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="resume-wide">
+      <Button href={site.resumePath} variant="secondary" size="sm" download label="Download resume (PDF)">Resume</Button>
+    </div>
+
+    <!-- Below 1024px the nav lives in a <details>, so it opens without JavaScript. -->
+    <details class="nav-menu">
+      <summary>
+        <span class="icon-open"><Icon name="list" /></span>
+        <span class="icon-close"><Icon name="x" /></span>
+        <span>Menu</span>
+      </summary>
+      <div class="menu-panel">
+        <nav aria-label="Main">
+          <ul>
+            {links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+            <li><a href={site.resumePath} download>Download resume (PDF)</a></li>
+          </ul>
+        </nav>
+      </div>
+    </details>
+  </div>
+</header>
+
+<script>
+  import '../../scripts/nav';
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: var(--header-h);
+  }
+  /* The frosted glass lives on a layer behind the bar, not on the header itself: an element with
+     backdrop-filter becomes the containing block of its position: fixed descendants, which
+     would trap the full-screen menu panel inside the 64px header. */
+  .site-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: color-mix(in oklab, var(--paper) 88%, transparent);
+    /* No hand-written -webkit- copy: the CSS minifier adds the prefix, and a manual one placed
+       after this line made it drop the standard property. */
+    backdrop-filter: blur(14px) saturate(140%);
+  }
+  @supports not (backdrop-filter: blur(1px)) {
+    .site-header::before { background: var(--paper); }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .site-header::before { background: var(--paper); backdrop-filter: none; }
+  }
+  /* Hairline under the header. With scroll timelines it appears once the page scrolls (02 §10 #2). */
+  .site-header::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 1px;
+    background: var(--hair);
+  }
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .site-header::after {
+        animation-name: header-line;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll();
+        animation-range: 0 64px;
+      }
+    }
+  }
+  @keyframes header-line {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .bar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .wordmark {
+    margin-right: auto;
+    color: var(--ink);
+    font-weight: 650;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  @media (min-width: 640px) {
+    .wordmark { font-size: 1rem; }
+  }
+  .wordmark:hover { color: var(--link); }
+
+  .nav-wide { display: none; }
+  .nav-wide ul { display: flex; gap: 4px; list-style: none; padding: 0; }
+  .nav-wide a,
+  .menu-panel a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .nav-wide a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding-inline: 12px;
+    border-radius: var(--radius-control);
+    font-weight: 500;
+  }
+  .nav-wide a:hover { background: var(--tint); }
+
+  .resume-wide { display: none; }
+  @media (min-width: 640px) {
+    .resume-wide { display: block; }
+  }
+
+  .nav-menu summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding-inline: 12px;
+    border-radius: var(--radius-control);
+    font-weight: 600;
+    list-style: none;
+    cursor: pointer;
+  }
+  .nav-menu summary::-webkit-details-marker { display: none; }
+  .nav-menu summary:hover { background: var(--tint); }
+  .icon-close { display: none; }
+  .nav-menu[open] .icon-close { display: inline-flex; }
+  .nav-menu[open] .icon-open { display: none; }
+
+  .menu-panel {
+    position: fixed;
+    inset: var(--header-h) 0 0 0;
+    z-index: 30;
+    background: var(--paper);
+    padding: 24px var(--gutter);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .menu-panel a:hover { color: var(--link); }
+  .menu-panel ul { list-style: none; padding: 0; display: grid; gap: 4px; }
+  .menu-panel a {
+    display: flex;
+    align-items: center;
+    min-height: 56px;
+    font-size: 1.375rem;
+    font-weight: 650;
+    border-bottom: 1px solid var(--hair);
+  }
+
+  @media (min-width: 1024px) {
+    .nav-wide { display: block; }
+    .nav-menu { display: none; }
+  }
+</style>

@@ -1,0 +1,48 @@
+<!doctype html>
+<!--
+  The Open Graph image for every page (02 §12, O1): 1200x630 with the site's font, colors, and
+  portrait. Rendered into public/og-default.png by `node tools/og.mjs`; edit this file, then rerun.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../src/styles/tokens.css" />
+    <style>
+      @font-face {
+        font-family: 'Recursive';
+        src: url('../src/assets/fonts/recursive-latin-mono-normal.woff2') format('woff2');
+        font-weight: 300 1000;
+      }
+      :root { color-scheme: light; }
+      * { box-sizing: border-box; margin: 0; }
+      body {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        align-items: center;
+        gap: 64px;
+        width: 1200px;
+        height: 630px;
+        padding: 72px 80px;
+        background: var(--block);
+        color: var(--on-block);
+        font-family: 'Recursive', sans-serif;
+      }
+      .name { font-size: 68px; font-weight: 780; line-height: 1.02; letter-spacing: -0.025em; }
+      .role { margin-top: 22px; font-size: 36px; font-weight: 650; }
+      /* The site's lemon highlighter (.mark), under the role instead of a number. */
+      .role span { background: linear-gradient(var(--accent), var(--accent)) no-repeat left 92% / 100% 0.22em; }
+      .line { margin-top: 28px; font-size: 28px; line-height: 1.4; color: var(--on-block-muted); }
+      .site { margin-top: 44px; font-size: 24px; font-variation-settings: "MONO" 1; color: var(--on-block-muted); }
+      img { width: 340px; height: 340px; border-radius: 28px; object-fit: cover; }
+    </style>
+  </head>
+  <body>
+    <div>
+      <p class="name">Michael Geraldin Wijaya</p>
+      <p class="role"><span>AI Engineer</span></p>
+      <p class="line">Real-time voice agents, vision QC, and agentic RAG.</p>
+      <p class="site">michgerald.online</p>
+    </div>
+    <img src="../src/assets/portrait/profile.jpg" alt="" />
+  </body>
+</html>

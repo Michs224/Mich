@@ -1,0 +1,131 @@
+---
+// Experience timeline 8/12 with education beside it 4/12 (02 §7). Both lists are in time order,
+// newest first, so both are <ol>. Bullets come from the CV unchanged, at most four per entry.
+import { formatMonth, getEducation, getExperience } from '../../lib/content';
+
+const experience = await getExperience();
+const education = await getEducation();
+
+const period = (start: string, end?: string) => `${formatMonth(start)} - ${end ? formatMonth(end) : 'present'}`;
+---
+<section id="experience" class="section wrap" aria-labelledby="experience-title education-title">
+  <div class="columns">
+    <div>
+      <h2 id="experience-title" class="t-h2 section-title">Experience</h2>
+      <ol class="timeline">
+        {experience.map(({ data }) => (
+          <li class:list={['entry', { 'is-current': data.roles.some((role) => !role.end) }]}>
+            <div class="entry-head">
+              <h3 class="t-h3">{data.org}</h3>
+              {data.location && <p class="t-small t-muted">{data.location}</p>}
+            </div>
+            <ol class="roles">
+              {data.roles.map((role) => (
+                <li class="role">
+                  <span class="role-title">{role.title}</span>{' '}
+                  <span class="role-period">{period(role.start, role.end)}</span>
+                </li>
+              ))}
+            </ol>
+            <ul class="bullets">
+              {data.bullets.map((bullet) => <li>{bullet}</li>)}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    <div id="education">
+      <h2 id="education-title" class="t-h2 section-title">Education</h2>
+      <ol class="degrees">
+        {education.map(({ data }) => (
+          <li class="degree">
+            <h3 class="degree-title">{data.degree}</h3>
+            <p>{data.school}</p>
+            <p class="t-small t-muted">{data.start} - {data.end ?? 'present'}</p>
+            <dl class="facts t-small">
+              <dt>Focus</dt>
+              <dd>{data.focus}</dd>
+              {data.gpa && (
+                <>
+                  <dt>GPA</dt>
+                  <dd>{data.gpa}</dd>
+                </>
+              )}
+              {data.honors && (
+                <>
+                  <dt>Honors</dt>
+                  <dd>{data.honors.join(', ')}</dd>
+                </>
+              )}
+            </dl>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .columns { display: grid; gap: 64px; }
+  @media (min-width: 1024px) {
+    .columns { grid-template-columns: 8fr 4fr; gap: 48px; align-items: start; }
+  }
+
+  /* ---------- Timeline: one rail, one dot per organization; the current one is filled ---------- */
+  .timeline { display: grid; gap: 48px; padding: 0; list-style: none; }
+  .entry { position: relative; display: grid; gap: 14px; padding-left: 36px; }
+  .entry::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 14px;
+    bottom: -48px; /* through the gap to the next dot */
+    width: 2px;
+    background: var(--hair);
+  }
+  .entry:last-child::before { bottom: 0; }
+  .entry::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--paper);
+    box-shadow: inset 0 0 0 2px var(--link);
+  }
+  .entry.is-current::after { background: var(--link); }
+
+  .entry-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 14px; }
+  .roles { display: grid; gap: 4px; padding: 0; list-style: none; max-width: 66ch; }
+  .role { display: flex; flex-direction: column; }
+  @media (min-width: 640px) {
+    .role { flex-direction: row; flex-wrap: wrap; justify-content: space-between; gap: 0 16px; }
+  }
+  .role-title { font-weight: 600; }
+  .role-period { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .bullets { display: grid; gap: 8px; max-width: 66ch; padding-left: 1.1em; list-style-type: disc; }
+  .bullets li::marker { color: var(--muted); }
+
+  /* ---------- Education: one panel, degrees split by a hairline ---------- */
+  .degrees {
+    padding: 0;
+    list-style: none;
+    border-radius: var(--radius-frame);
+    background: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--hair);
+  }
+  .degree { display: grid; gap: 4px; padding: 24px; }
+  .degree + .degree { border-top: 1px solid var(--hair); }
+  /* Tablets: the education panel spans the page, so the two degrees sit side by side. */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .degrees { display: grid; grid-template-columns: 1fr 1fr; }
+    .degree + .degree { border-top: 0; border-left: 1px solid var(--hair); }
+  }
+  .degree-title { font-size: 1.125rem; font-weight: 650; line-height: 1.3; }
+  .facts { display: grid; grid-template-columns: 4rem 1fr; gap: 4px 12px; margin: 10px 0 0; } /* one label width for every degree */
+  .facts dt { color: var(--muted); }
+  .facts dd { margin: 0; }
+</style>

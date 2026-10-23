@@ -1,0 +1,80 @@
+/*
+ * Design tokens (02 §3, §5). Palette "Viridis": a teal family as neutrals plus one lemon accent.
+ * Every color is written once as light-dark(light, dark); color-scheme picks the side.
+ * The accent never becomes text, an icon, or a thin line on the light background (1.34:1).
+ */
+:root {
+  color-scheme: light dark;
+
+  --paper: light-dark(#f3f6f5, #0d1817);
+  --surface: light-dark(#fcfdfd, #152421);
+  --ink: light-dark(#0e1f1e, #e8f0ee);
+  --muted: light-dark(#4b5d5a, #a3b6b2);
+  --link: light-dark(#0b6b64, #6fd6c9);
+  --block: light-dark(#0e3b38, #103a36);
+  --on-block: #e7f0ee;
+  --on-block-muted: #a9c2bd;
+  --block-panel: #0a2c2a; /* solid panel on the block, so text never depends on what is behind it */
+  --on-block-track: rgb(231 240 238 / 0.18);
+  --on-block-hair: rgb(231 240 238 / 0.12);
+  --on-block-tint: rgb(231 240 238 / 0.1);
+  --diagram-bg: #fff; /* diagrams are drawn on white in both modes */
+  --accent: #e9d84a;
+  --on-accent: #0e1f1e;
+  --field-line: light-dark(#6e817d, #71857f);
+  --hair: light-dark(#d5dedb, #2a3b38);
+  --tint: light-dark(rgb(11 107 100 / 0.07), rgb(111 214 201 / 0.08));
+  --error: light-dark(#b3261e, #ffb4ab);
+  --success: light-dark(#1f6b45, #8fd6ae);
+  --focus: var(--link);
+
+  /* Field colors for data (02 §8b), validated with the dataviz palette script. */
+  --field-llm-voice: light-dark(#3556b5, #5a79da);
+  --field-vision-audio: light-dark(#00907f, #139a8f);
+  --field-ml-data: light-dark(#d65f27, #d0652f);
+  --field-software: var(--muted);
+
+  --shadow: 0 1px 2px light-dark(rgb(14 31 30 / 0.06), rgb(0 0 0 / 0.3)),
+    0 24px 48px -20px light-dark(rgb(14 31 30 / 0.3), rgb(0 0 0 / 0.6));
+  --shadow-button: 0 10px 22px -12px rgb(14 31 30 / 0.55);
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --header-h: 64px;
+  --gutter: 20px;
+  --content-max: 1240px;
+  --radius-control: 10px;
+  --radius-frame: 20px;
+  --radius-small: 6px; /* map labels and archive rows */
+}
+
+@media (min-width: 768px) {
+  :root { --gutter: 32px; }
+}
+
+@media (min-width: 1280px) {
+  :root { --gutter: 40px; }
+}
+
+/* light-dark() needs Safari 17.5 or newer, and iOS 16 is the last version for the iPhone 8 and X.
+   Without it every token above is invalid (Trace would show light text on a white page), so
+   those browsers get the light theme. */
+@supports not (color: light-dark(#000, #fff)) {
+  :root {
+    color-scheme: light;
+    --paper: #f3f6f5;
+    --surface: #fcfdfd;
+    --ink: #0e1f1e;
+    --muted: #4b5d5a;
+    --link: #0b6b64;
+    --block: #0e3b38;
+    --field-line: #6e817d;
+    --hair: #d5dedb;
+    --tint: rgb(11 107 100 / 0.07);
+    --error: #b3261e;
+    --success: #1f6b45;
+    --field-llm-voice: #3556b5;
+    --field-vision-audio: #00907f;
+    --field-ml-data: #d65f27;
+    --shadow: 0 1px 2px rgb(14 31 30 / 0.06), 0 24px 48px -20px rgb(14 31 30 / 0.3);
+  }
+}

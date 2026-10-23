@@ -1,0 +1,151 @@
+---
+// The paper as a full-width citation, then awards and credentials in two columns (02 §7). Text
+// only. Olympiad medals from 2022 wait in a disclosure (02 §11).
+import Button from '../ui/Button.astro';
+import ExternalLabel from '../ui/ExternalLabel.astro';
+import { getAwards, getCertifications, getPublications } from '../../lib/content';
+import { site } from '../../data/site';
+
+const publications = await getPublications();
+const { highlights, earlier } = await getAwards();
+const certifications = await getCertifications();
+
+const year = (month: string) => month.slice(0, 4);
+const earlierYears = [...new Set(earlier.map(({ data }) => year(data.date)))].join(', ');
+---
+<section id="research" class="section wrap" aria-labelledby="research-title">
+  <h2 id="research-title" class="t-h2 section-title">Research and recognition</h2>
+
+  {publications.map(({ data }) => {
+    const href = data.doi ? `https://doi.org/${data.doi}` : data.url;
+    return (
+      <article class="citation">
+        <div class="cite">
+          <h3 class="t-h3 paper-title">{data.title}</h3>
+          <p>
+            {data.authors.map((author, i) => (
+              <>
+                {i > 0 && ', '}
+                {author === site.name ? <strong>{author}</strong> : author}
+              </>
+            ))}
+          </p>
+          <p class="t-muted">
+            {data.publisher}{data.volume && `, vol. ${data.volume}`}{data.pages && `, pp. ${data.pages}`}, {data.year}.
+            {' '}{data.note ? `${data.note} at ${data.venue}` : data.venue}.
+          </p>
+          {data.doi && <p class="t-small t-muted">DOI <span class="id" translate="no">{data.doi}</span></p>}
+        </div>
+        {href && <Button href={href} variant="secondary">Read the paper</Button>}
+      </article>
+    );
+  })}
+
+  <div class="lists">
+    <div id="achievements">
+      <h3 class="t-h3 list-title">Awards</h3>
+      <ul class="items">
+        {highlights.map(({ data }) => (
+          <li>
+            <p class="item-title">{data.title}</p>
+            <p class="t-small t-muted">{data.issuer}, {year(data.date)}</p>
+          </li>
+        ))}
+      </ul>
+      {earlier.length > 0 && (
+        <details class="earlier">
+          <summary>Earlier: national math and science olympiads ({earlierYears})</summary>
+          <ul class="items">
+            {earlier.map(({ data }) => (
+              <li>
+                <p class="item-title">{data.title}</p>
+                <p class="t-small t-muted">{data.issuer}, {year(data.date)}</p>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+    </div>
+
+    <div id="certificates">
+      <h3 class="t-h3 list-title">Certifications</h3>
+      <ul class="items">
+        {certifications.map(({ data }) => (
+          <li>
+            <p class="item-title">
+              {data.url ? (
+                <a href={data.url}>
+                  <ExternalLabel text={data.title} />
+                  <span class="sr-only">, verify the credential</span>
+                </a>
+              ) : (
+                data.title
+              )}
+            </p>
+            <p class="t-small t-muted">{data.issuer}, {year(data.date)}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .citation {
+    display: grid;
+    justify-items: start;
+    gap: 24px;
+    margin-bottom: 64px;
+    padding: 28px 24px;
+    border-radius: var(--radius-frame);
+    background: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--hair);
+  }
+  @media (min-width: 768px) { .citation { padding: 40px 48px; } }
+  /* Wide screens: the citation on the left, the way to read it on the right. */
+  @media (min-width: 1024px) {
+    .citation { grid-template-columns: minmax(0, 1fr) auto; align-items: start; column-gap: 48px; }
+  }
+  .cite { display: grid; gap: 10px; }
+  .cite p { max-width: 72ch; }
+  .paper-title { max-width: 56ch; margin-bottom: 4px; }
+  .citation strong { font-weight: 650; }
+  .cite .id { overflow-wrap: anywhere; }
+
+  .lists { display: grid; gap: 56px; }
+  @media (min-width: 1024px) {
+    .lists { grid-template-columns: 1fr 1fr; gap: 64px; }
+  }
+  /* Thirteen credentials against four awards: on wide screens the credentials flow into two
+     columns (newest first, top to bottom) so the halves stay close in height. */
+  @media (min-width: 1280px) {
+    .lists { grid-template-columns: 5fr 7fr; }
+  }
+  /* Credentials flow into two columns wherever their column is wide enough: alone on tablets, or
+     beside the awards on wide screens. */
+  @media (min-width: 640px) and (max-width: 1023px), (min-width: 1280px) {
+    #certificates .items { display: block; columns: 2; column-gap: 40px; }
+    #certificates .items > li { break-inside: avoid; margin-bottom: 16px; }
+  }
+  .list-title { margin-bottom: 20px; }
+  .items { display: grid; gap: 16px; padding: 0; list-style: none; }
+  .item-title { font-weight: 600; }
+  .item-title a { color: var(--ink); text-decoration: none; }
+  .item-title a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+
+  .earlier { margin-top: 20px; }
+  .earlier summary { padding-block: 10px; color: var(--link); font-weight: 600; cursor: pointer; }
+  .earlier summary:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+  .earlier .items { margin-top: 12px; }
+
+  /* Motion #8 (02 §10): the disclosure opens by height where the browser can animate to auto. */
+  @media (prefers-reduced-motion: no-preference) {
+    .earlier { interpolate-size: allow-keywords; }
+    .earlier::details-content {
+      block-size: 0;
+      overflow-y: clip;
+      transition: block-size 250ms var(--ease), content-visibility 250ms allow-discrete;
+    }
+    .earlier[open]::details-content { block-size: auto; }
+  }
+</style>

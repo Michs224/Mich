@@ -1,0 +1,189 @@
+---
+import { getImage } from 'astro:assets';
+import { DOMAIN_LABELS } from '../../lib/content';
+import { getMap } from '../../lib/map';
+import posterLight from '../../assets/map/poster-light.png';
+import posterDark from '../../assets/map/poster-dark.png';
+import { INITIAL_POSE, project } from '../../scripts/embedding-map/layout';
+
+interface Props {
+  /** Set on the one page where the poster is the LCP candidate (02 §14). */
+  priority?: boolean;
+}
+const { priority = false } = Astro.props;
+
+// The map is built from the content by build.py (02 §8b). Until it runs again, a new project is
+// simply not on the map yet; the build says so instead of failing.
+const { missing, unknown, ...clientData } = await getMap();
+if (missing.length || unknown.length) {
+  console.warn(
+    `src/data/embedding-map.json is out of date. Not on the map yet: ${missing.join(', ') || 'none'}. No longer in the content: ${unknown.join(', ') || 'none'}. Run python -I tools/embedding-map/build.py, then node tools/embedding-map/poster.mjs.`,
+  );
+}
+
+// Every project has a label at the pose the canvas starts in. Featured labels show over the poster;
+// pressing a legend field shows every label in that field instead (02 §8b).
+const labels = clientData.projects.map((p, i) => {
+  const point = project(p.xyz, INITIAL_POSE, { width: 1000, height: 1000 });
+  // Featured projects go by their short names; others keep the full title, so "(Coursera course)"
+  // still tells the two movie recommenders apart.
+  const text = p.featured ? p.title.replace(/\s*\(.*\)$/, '') : p.title;
+  return { i, domain: p.domain, featured: p.featured, text, left: point.x / 10, top: point.y / 10 };
+});
+
+// Three field colors plus gray for software (02 §8b); every color the map uses has an entry.
+const fields = ['llm-voice', 'vision-audio', 'ml-data', 'software'] as const;
+const widths = [480, 720, 1000];
+const sizes = '(min-width: 1280px) 520px, (min-width: 1024px) 40vw, (min-width: 768px) 70vw, 100vw';
+const [lightAvif, lightWebp, darkAvif, darkWebp] = await Promise.all([
+  getImage({ src: posterLight, widths, format: 'avif' }),
+  getImage({ src: posterLight, widths, format: 'webp' }),
+  getImage({ src: posterDark, widths, format: 'avif' }),
+  getImage({ src: posterDark, widths, format: 'webp' }),
+]);
+---
+<figure class="map" data-animating="false">
+  <div class="map-stage">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" type="image/avif" srcset={darkAvif.srcSet.attribute} sizes={sizes} />
+      <source media="(prefers-color-scheme: dark)" type="image/webp" srcset={darkWebp.srcSet.attribute} sizes={sizes} />
+      <source type="image/avif" srcset={lightAvif.srcSet.attribute} sizes={sizes} />
+      <img
+        src={lightWebp.src}
+        srcset={lightWebp.srcSet.attribute}
+        sizes={sizes}
+        width="1000"
+        height="1000"
+        alt={`Map of ${clientData.projects.length} projects and the tools they use, grouped by field`}
+        loading={priority ? 'eager' : 'lazy'}
+        fetchpriority={priority ? 'high' : undefined}
+        decoding={priority ? 'sync' : 'async'}
+      />
+    </picture>
+    <canvas aria-hidden="true"></canvas>
+    <div class="map-labels" aria-hidden="true">
+      {labels.map((l) => (
+        <span
+          class="map-label"
+          data-index={l.i}
+          data-domain={l.domain}
+          data-featured={String(l.featured)}
+          style={`left:${l.left.toFixed(2)}%;top:${l.top.toFixed(2)}%`}
+          class:list={{ 'is-left': l.left > 62 }}
+        >
+          {l.text}
+        </span>
+      ))}
+      <span class="map-label is-hover" hidden></span>
+    </div>
+    <span class="map-probe" aria-hidden="true"></span>
+  </div>
+  <div class="map-legend" role="group" aria-label="Highlight a field on the map">
+    {fields.map((f) => (
+      <button type="button" aria-pressed="false" data-domain={f} style={`--swatch: var(--field-${f})`}>
+        <span class="swatch" aria-hidden="true"></span>{DOMAIN_LABELS[f]}
+      </button>
+    ))}
+  </div>
+  <figcaption class="t-small t-muted">
+    {clientData.projects.length} projects, placed by embedding each description with{' '}
+    <span class="id" translate="no">all-MiniLM-L6-v2</span> and reducing to 3D with PCA. Press a field to
+    label its projects.{' '}
+    <a href="/#archive">Browse all projects</a>
+  </figcaption>
+  <script is:inline id="map-data" type="application/json" set:html={JSON.stringify(clientData).replace(/</g, '\\u003c')} />
+</figure>
+
+<script>
+  import { mountEmbeddingMap } from '../../scripts/embedding-map/mount';
+  document.querySelectorAll<HTMLElement>('figure.map').forEach(mountEmbeddingMap);
+</script>
+
+<style>
+  .map { margin: 0; }
+  .map-stage {
+    position: relative;
+    aspect-ratio: 1;
+  }
+  .map-stage img,
+  .map-stage canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  canvas {
+    opacity: 0;
+    touch-action: pan-y;
+    cursor: grab;
+  }
+  .map.is-live canvas { opacity: 1; }
+  .map.is-live img { visibility: hidden; }
+
+  .map-labels {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .map-label {
+    position: absolute;
+    translate: 14px -50%;
+    padding: 2px 8px;
+    border-radius: var(--radius-small);
+    background: color-mix(in oklab, var(--paper) 82%, transparent);
+    color: var(--ink);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.4;
+    /* Long titles wrap. A max-content width (not shrink-to-fit) keeps the size independent of
+       where the label sits, which settleLabels relies on. */
+    width: max-content;
+    max-width: min(20rem, 70%);
+  }
+  .map-label.is-left { translate: calc(-100% - 14px) -50%; }
+  .map-label.is-hover { z-index: 1; box-shadow: var(--shadow); }
+  .map-label[data-featured='false'] { display: none; }
+  .map[data-highlight] .map-label[data-index] { display: none; }
+  .map[data-highlight='llm-voice'] .map-label[data-domain='llm-voice'],
+  .map[data-highlight='vision-audio'] .map-label[data-domain='vision-audio'],
+  .map[data-highlight='ml-data'] .map-label[data-domain='ml-data'],
+  .map[data-highlight='software'] .map-label[data-domain='software'] { display: block; }
+  .map-probe { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+  /* Outlined buttons, so the fields read as controls, not a caption: two aligned columns where
+     they fit, wrapping on phones. */
+  .map-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 14px;
+  }
+  @media (min-width: 480px) {
+    .map-legend { display: grid; grid-template-columns: repeat(2, max-content); }
+  }
+  /* Secondary controls: 36px is above the WCAG 2.2 target-size minimum (24px). */
+  .map-legend button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 36px;
+    padding-inline: 10px 12px;
+    border: 0;
+    border-radius: var(--radius-control);
+    background: none;
+    box-shadow: inset 0 0 0 1px var(--hair);
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  .map-legend button:hover { background: var(--tint); color: var(--ink); }
+  .map-legend button[aria-pressed='true'] { background: var(--tint); color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--link); }
+  .swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--swatch);
+  }
+  figcaption { margin-top: 10px; max-width: 60ch; }
+  figcaption .id { white-space: nowrap; }
+</style>

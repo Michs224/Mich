@@ -1,0 +1,108 @@
+---
+// Every project that is not featured, grouped by field (02 §7). One colored line per group, in
+// the embedding map's field colors, and no rules between rows. Rows with code link to it.
+import Icon from '../ui/Icon.astro';
+import ExternalLabel from '../ui/ExternalLabel.astro';
+import { getArchiveGroups } from '../../lib/content';
+import { site } from '../../data/site';
+
+const groups = await getArchiveGroups();
+const LABELS = { course: 'Course project', client: 'Client work' } as const;
+---
+<section id="archive" class="section wrap" aria-labelledby="archive-title">
+  <h2 id="archive-title" class="t-h2 section-title">More projects</h2>
+  <div class="groups">
+    {groups.map((group) => (
+      <div class="group" style={`--field: var(--field-${group.domain})`}>
+        <h3 class="group-title">{group.label}</h3>
+        <ul class="rows">
+          {group.items.map(({ data }) => {
+            // A course title that already says so ("(Coursera course)") needs no second label.
+            const label =
+              data.status === 'course'
+                ? /course/i.test(data.title) ? undefined : LABELS.course
+                : data.confidential && !data.links.repo ? LABELS.client : undefined;
+            return (
+              <li class="row">
+                <p class="row-title">
+                  {data.links.repo ? (
+                    <a href={data.links.repo}>
+                      <ExternalLabel text={data.title} />
+                      <span class="sr-only">, source on GitHub</span>
+                    </a>
+                  ) : (
+                    <span>{data.title}</span>
+                  )}
+                  {label && (
+                    <>
+                      {' '}<span class="label">{label}</span>
+                    </>
+                  )}
+                </p>
+                <p class="description">{data.description}</p>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ))}
+  </div>
+  <a class="all" href={`${site.socials.github}?tab=repositories`}>
+    All repositories on GitHub
+    <Icon name="arrow-up-right" />
+  </a>
+</section>
+
+<style>
+  /* Two columns that balance by height; a group never splits across them. */
+  @media (min-width: 1024px) {
+    .groups { columns: 2; column-gap: 64px; }
+  }
+  .group {
+    break-inside: avoid;
+    display: grid;
+    gap: 20px;
+    padding-top: 16px;
+    padding-bottom: 48px;
+    border-top: 2px solid var(--field);
+  }
+  .group-title { font-size: 1.125rem; font-weight: 650; }
+  .rows { display: grid; gap: 18px; padding: 0; list-style: none; }
+
+  .row { position: relative; display: grid; gap: 4px; border-radius: var(--radius-small); }
+  .row-title { font-weight: 600; }
+  .row-title a { color: var(--ink); text-decoration: none; }
+  /* The whole row is the link's hit area. */
+  .row-title a::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
+  .row-title a:focus-visible { outline: none; }
+  .row:has(a:focus-visible) { outline: 3px solid var(--focus); outline-offset: 4px; }
+  .row:has(a:hover, a:focus-visible) :global(.tail .icon) { color: var(--link); }
+  .row:has(a:hover) .row-title a { color: var(--link); }
+  /* The description exactly as written (D10), not the shortened summary the cards use. */
+  .description { max-width: 60ch; color: var(--muted); font-size: 0.9375rem; line-height: 1.5; }
+  .label {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 1px 8px;
+    border-radius: var(--radius-control);
+    background: var(--tint);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  /* Motion #7 (02 §10): the row slides 4px. The hit area reaches back 4px meanwhile, so a cursor
+     on the row's left edge cannot hover it on and off. */
+  @media (prefers-reduced-motion: no-preference) {
+    .row { transition: transform 200ms var(--ease); }
+    .row:has(a:hover, a:focus-visible) { transform: translateX(4px); }
+    .row:has(a:hover) a::after { left: -4px; }
+  }
+
+  .all {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    font-weight: 600;
+  }
+</style>

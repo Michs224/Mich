@@ -1,0 +1,18 @@
+---
+// Text for a link that leaves the site: the ↗ icon is glued to the last word, so it never wraps
+// onto a line of its own.
+import Icon from './Icon.astro';
+
+interface Props {
+  text: string;
+}
+const words = Astro.props.text.split(' ');
+const last = words.pop();
+---
+{words.length > 0 && `${words.join(' ')} `}<span class="tail">{last}<Icon name="arrow-up-right" /></span>
+
+<style>
+  .tail { white-space: nowrap; }
+  /* :global because the span comes from Icon.astro, outside this component's scope. */
+  .tail :global(.icon) { width: 1.1em; height: 1.1em; margin-left: 6px; vertical-align: -0.15em; color: var(--muted); }
+</style>

@@ -1,0 +1,127 @@
+---
+// A project's picture, on its card and at the top of its page: the cover when it has one,
+// otherwise its own view of the embedding map (constellation.ts). Every project gets a picture
+// without anyone making artwork. Both places share a view-transition name, so the card's picture
+// becomes the page's.
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import type { Project } from '../../lib/content';
+import type { getMap } from '../../lib/map';
+import { constellation } from '../../scripts/embedding-map/constellation';
+
+interface Props {
+  project: Project;
+  map: Awaited<ReturnType<typeof getMap>>;
+  sizes: string;
+  /** The cover's alt text. On a card it stays empty: the card's title already names the project. */
+  alt?: string;
+  /** Link the cover to its full-size file, which the page's Lightbox opens larger. */
+  zoom?: boolean;
+  priority?: boolean;
+}
+const { project, map, sizes, alt = '', zoom = false, priority = false } = Astro.props;
+const { cover, domain } = project.data;
+const size = { width: 400, height: 250 };
+const picture = cover ? undefined : constellation(map, map.projects.findIndex((p) => p.slug === project.id), size);
+// A cover close to the card's 16:10 fills it; a much wider or taller one, like a diagram, shows whole.
+const whole = cover ? Math.abs(cover.width / cover.height - 1.6) > 0.4 : false;
+
+const xy = (x: number, y: number) => `${x.toFixed(1)} ${y.toFixed(1)}`;
+const inFrame = (dot: { x: number; y: number }) => dot.x > -8 && dot.x < size.width + 8 && dot.y > -8 && dot.y < size.height + 8;
+/** Each dot is a zero-length line with round caps: one path per color and size keeps the markup small. */
+function paths(dots: { x: number; y: number; r: number; color: string }[]) {
+  const groups = new Map<string, { color: string; width: number; d: string }>();
+  for (const dot of dots.filter(inFrame)) {
+    const width = Math.round(dot.r * 4) / 2;
+    const key = `${dot.color} ${width}`;
+    const group = groups.get(key) ?? { color: dot.color, width, d: '' };
+    group.d += `M${xy(dot.x, dot.y)}h0`;
+    groups.set(key, group);
+  }
+  return [...groups.values()];
+}
+const lines = (own: boolean) =>
+  picture?.links
+    .filter((link) => link.own === own)
+    .map((link) => `M${xy(link.x1, link.y1)}L${xy(link.x2, link.y2)}`)
+    .join('');
+const dots = picture && [
+  ...paths(picture.tools.filter((t) => !t.own).map((t) => ({ ...t, color: 'var(--field-line)' }))),
+  ...paths(picture.projects.filter((p) => !p.own).map((p) => ({ ...p, color: `var(--field-${p.domain})` }))),
+];
+const ownTools = picture && paths(picture.tools.filter((t) => t.own).map((t) => ({ ...t, color: 'var(--field)' })));
+---
+<div class:list={['media', { whole }]} style={`--field: var(--field-${domain}); view-transition-name: media-${project.id}`}>
+  {cover && zoom ? (
+    <a class="zoom" href={cover.src}>
+      <Picture src={cover} formats={['avif', 'webp']} widths={[480, 960].filter((w) => w <= cover.width)} sizes={sizes} alt={alt} priority={priority} />
+      <span class="zoom-badge"><Icon name="magnifying-glass-plus" /></span>
+      <span class="sr-only">, open larger</span>
+    </a>
+  ) : cover ? (
+    <Picture src={cover} formats={['avif', 'webp']} widths={[400, 800].filter((w) => w <= cover.width)} sizes={sizes} alt={alt} priority={priority} />
+  ) : (
+    picture && (
+      <svg viewBox={`0 0 ${size.width} ${size.height}`} aria-hidden="true">
+        <path class="link" d={lines(false)} />
+        {dots!.map((g) => <path class="dot" d={g.d} style={`stroke: ${g.color}; stroke-width: ${g.width}`} />)}
+        <path class="link own" d={lines(true)} />
+        {ownTools!.map((g) => <path class="dot own" d={g.d} style={`stroke: ${g.color}; stroke-width: ${g.width}`} />)}
+        {picture.focus && (
+          <>
+            <circle class="halo" cx={picture.focus.x.toFixed(1)} cy={picture.focus.y.toFixed(1)} r="30" />
+            <circle class="focus" cx={picture.focus.x.toFixed(1)} cy={picture.focus.y.toFixed(1)} r="6" />
+          </>
+        )}
+      </svg>
+    )
+  )}
+</div>
+
+<style>
+  .media {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background:
+      radial-gradient(70% 90% at 50% 50%, color-mix(in oklab, var(--field) 14%, transparent), transparent 70%),
+      color-mix(in oklab, var(--field) 5%, var(--paper));
+  }
+  .media > svg,
+  .zoom,
+  .media :global(picture),
+  .media :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  /* Covers may be transparent diagrams, which are drawn on white in both themes. */
+  .media :global(img) { object-fit: cover; background: var(--diagram-bg); }
+  .media.whole { background: var(--diagram-bg); }
+  .media.whole :global(img) { object-fit: contain; padding: 6% 7%; }
+
+  .zoom { position: relative; cursor: zoom-in; }
+  .zoom:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+  /* A fixed light badge: covers sit on white in both themes. */
+  .zoom-badge {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.92);
+    color: #0e1f1e;
+    box-shadow: 0 1px 3px rgb(14 31 30 / 0.25);
+    font-size: 1.125rem;
+  }
+  .zoom:hover .zoom-badge { background: #fff; }
+
+  .dot { fill: none; stroke-linecap: round; opacity: 0.55; }
+  .dot.own { opacity: 1; }
+  .link { fill: none; stroke: var(--field-line); stroke-width: 1; opacity: 0.22; }
+  .link.own { stroke: var(--field); stroke-width: 1.25; opacity: 0.8; }
+  .halo { fill: var(--field); opacity: 0.14; }
+  .focus { fill: var(--field); stroke: var(--surface); stroke-width: 2.5; }
+</style>

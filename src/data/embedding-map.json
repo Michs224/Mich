@@ -1,0 +1,1053 @@
+{
+ "model": "sentence-transformers/all-MiniLM-L6-v2",
+ "method": "pca",
+ "varianceExplained": 0.321,
+ "projects": [
+  {
+   "slug": "adhoc-insights-consumer-goods",
+   "xyz": [
+    -0.1796,
+    -0.3711,
+    0.5949
+   ]
+  },
+  {
+   "slug": "agentic-rag",
+   "xyz": [
+    -0.6482,
+    -0.0249,
+    -0.0339
+   ]
+  },
+  {
+   "slug": "billionaires-image-classification",
+   "xyz": [
+    0.4231,
+    -0.4565,
+    -0.0297
+   ]
+  },
+  {
+   "slug": "credit-card-fraud-detection",
+   "xyz": [
+    0.6677,
+    -0.4452,
+    -0.2671
+   ]
+  },
+  {
+   "slug": "credit-risk-model",
+   "xyz": [
+    0.5568,
+    -0.189,
+    -0.039
+   ]
+  },
+  {
+   "slug": "fnb-oop",
+   "xyz": [
+    -0.0965,
+    -0.464,
+    0.6737
+   ]
+  },
+  {
+   "slug": "libralink",
+   "xyz": [
+    0.0679,
+    0.2611,
+    0.2093
+   ]
+  },
+  {
+   "slug": "movie-recommendation-coursera",
+   "xyz": [
+    0.185,
+    0.7477,
+    0.3676
+   ]
+  },
+  {
+   "slug": "movie-recommendation",
+   "xyz": [
+    0.1557,
+    0.7366,
+    0.3236
+   ]
+  },
+  {
+   "slug": "outreach-mail-generator",
+   "xyz": [
+    -0.3259,
+    -0.6558,
+    -0.0702
+   ]
+  },
+  {
+   "slug": "patient-condition-classification",
+   "xyz": [
+    0.067,
+    -0.0852,
+    -0.4001
+   ]
+  },
+  {
+   "slug": "personal-medical-chatbot",
+   "xyz": [
+    -0.6266,
+    -0.2304,
+    -0.3686
+   ]
+  },
+  {
+   "slug": "plant-disease-detection",
+   "xyz": [
+    0.3653,
+    -0.4997,
+    -0.4519
+   ]
+  },
+  {
+   "slug": "pyspark-ml",
+   "xyz": [
+    0.4169,
+    -0.3025,
+    -0.2224
+   ]
+  },
+  {
+   "slug": "report-interview-integration",
+   "xyz": [
+    -0.6196,
+    -0.4899,
+    0.122
+   ]
+  },
+  {
+   "slug": "research-assistant-bot",
+   "xyz": [
+    -0.421,
+    -0.2176,
+    -0.2369
+   ]
+  },
+  {
+   "slug": "simple-personal-chatbot",
+   "xyz": [
+    -0.339,
+    0.0619,
+    -0.6158
+   ]
+  },
+  {
+   "slug": "speech-emotion-recognition",
+   "xyz": [
+    0.1535,
+    0.1006,
+    -0.7846
+   ]
+  },
+  {
+   "slug": "twitter-sentiment-analysis",
+   "xyz": [
+    0.1166,
+    0.0045,
+    -0.6326
+   ]
+  },
+  {
+   "slug": "vision-qc",
+   "xyz": [
+    0.2822,
+    -0.8249,
+    0.2488
+   ]
+  },
+  {
+   "slug": "voice-agent",
+   "xyz": [
+    -0.4092,
+    -0.0736,
+    -0.4199
+   ]
+  }
+ ],
+ "tools": [
+  {
+   "name": "AI Agent",
+   "projects": [
+    "agentic-rag"
+   ],
+   "xyz": [
+    -0.5944,
+    0.1134,
+    -0.0172
+   ]
+  },
+  {
+   "name": "AI Voice Agent",
+   "projects": [
+    "voice-agent"
+   ],
+   "xyz": [
+    -0.3928,
+    -0.0021,
+    -0.5501
+   ]
+  },
+  {
+   "name": "ANN",
+   "projects": [
+    "simple-personal-chatbot"
+   ],
+   "xyz": [
+    -0.4261,
+    -0.0318,
+    -0.5388
+   ]
+  },
+  {
+   "name": "ASR",
+   "projects": [
+    "voice-agent"
+   ],
+   "xyz": [
+    -0.3321,
+    -0.1719,
+    -0.338
+   ]
+  },
+  {
+   "name": "AWS Bedrock",
+   "projects": [
+    "vision-qc"
+   ],
+   "xyz": [
+    0.3237,
+    -0.8634,
+    0.387
+   ]
+  },
+  {
+   "name": "Ad Hoc Analysis",
+   "projects": [
+    "adhoc-insights-consumer-goods"
+   ],
+   "xyz": [
+    -0.1329,
+    -0.3226,
+    0.4616
+   ]
+  },
+  {
+   "name": "CNN",
+   "projects": [
+    "libralink",
+    "speech-emotion-recognition"
+   ],
+   "xyz": [
+    0.1338,
+    0.1432,
+    -0.2727
+   ]
+  },
+  {
+   "name": "Canva",
+   "projects": [
+    "adhoc-insights-consumer-goods"
+   ],
+   "xyz": [
+    -0.1508,
+    -0.4726,
+    0.4892
+   ]
+  },
+  {
+   "name": "ChromaDB",
+   "projects": [
+    "outreach-mail-generator"
+   ],
+   "xyz": [
+    -0.2592,
+    -0.553,
+    -0.1556
+   ]
+  },
+  {
+   "name": "Collaborative Filtering",
+   "projects": [
+    "movie-recommendation-coursera"
+   ],
+   "xyz": [
+    0.2398,
+    0.7544,
+    0.5065
+   ]
+  },
+  {
+   "name": "Computer Vision",
+   "projects": [
+    "vision-qc"
+   ],
+   "xyz": [
+    0.3402,
+    -0.7492,
+    0.1339
+   ]
+  },
+  {
+   "name": "Content-Based",
+   "projects": [
+    "movie-recommendation-coursera",
+    "movie-recommendation"
+   ],
+   "xyz": [
+    0.1777,
+    0.7411,
+    0.3917
+   ]
+  },
+  {
+   "name": "Cosine Similarity",
+   "projects": [
+    "movie-recommendation"
+   ],
+   "xyz": [
+    0.2795,
+    0.668,
+    0.2757
+   ]
+  },
+  {
+   "name": "FAISS",
+   "projects": [
+    "research-assistant-bot"
+   ],
+   "xyz": [
+    -0.4265,
+    -0.3656,
+    -0.2561
+   ]
+  },
+  {
+   "name": "FastAPI",
+   "projects": [
+    "agentic-rag",
+    "plant-disease-detection"
+   ],
+   "xyz": [
+    -0.1285,
+    -0.2175,
+    -0.2443
+   ]
+  },
+  {
+   "name": "Flask",
+   "projects": [
+    "billionaires-image-classification",
+    "simple-personal-chatbot"
+   ],
+   "xyz": [
+    0.0846,
+    -0.216,
+    -0.3183
+   ]
+  },
+  {
+   "name": "Gemini",
+   "projects": [
+    "agentic-rag"
+   ],
+   "xyz": [
+    -0.6526,
+    -0.1374,
+    0.0643
+   ]
+  },
+  {
+   "name": "GenAI",
+   "projects": [
+    "outreach-mail-generator",
+    "personal-medical-chatbot",
+    "research-assistant-bot"
+   ],
+   "xyz": [
+    -0.432,
+    -0.3632,
+    -0.2638
+   ]
+  },
+  {
+   "name": "Google Cloud Functions",
+   "projects": [
+    "plant-disease-detection"
+   ],
+   "xyz": [
+    0.3679,
+    -0.6335,
+    -0.5183
+   ]
+  },
+  {
+   "name": "Google Cloud Platform (GCP)",
+   "projects": [
+    "plant-disease-detection"
+   ],
+   "xyz": [
+    0.2597,
+    -0.4794,
+    -0.3483
+   ]
+  },
+  {
+   "name": "Google Cloud Storage",
+   "projects": [
+    "plant-disease-detection"
+   ],
+   "xyz": [
+    0.3662,
+    -0.6491,
+    -0.4517
+   ]
+  },
+  {
+   "name": "Gradio",
+   "projects": [
+    "outreach-mail-generator",
+    "personal-medical-chatbot",
+    "plant-disease-detection"
+   ],
+   "xyz": [
+    -0.1994,
+    -0.4618,
+    -0.3434
+   ]
+  },
+  {
+   "name": "Groq",
+   "projects": [
+    "agentic-rag",
+    "outreach-mail-generator",
+    "research-assistant-bot"
+   ],
+   "xyz": [
+    -0.4764,
+    -0.3212,
+    -0.1533
+   ]
+  },
+  {
+   "name": "JDBC",
+   "projects": [
+    "fnb-oop"
+   ],
+   "xyz": [
+    -0.031,
+    -0.33,
+    0.6653
+   ]
+  },
+  {
+   "name": "Java",
+   "projects": [
+    "fnb-oop"
+   ],
+   "xyz": [
+    0.0314,
+    -0.4057,
+    0.7242
+   ]
+  },
+  {
+   "name": "JavaFX",
+   "projects": [
+    "fnb-oop"
+   ],
+   "xyz": [
+    -0.0952,
+    -0.564,
+    0.7846
+   ]
+  },
+  {
+   "name": "KNN",
+   "projects": [
+    "libralink"
+   ],
+   "xyz": [
+    0.0605,
+    0.3795,
+    0.3001
+   ]
+  },
+  {
+   "name": "Keras",
+   "projects": [
+    "simple-personal-chatbot",
+    "speech-emotion-recognition",
+    "twitter-sentiment-analysis"
+   ],
+   "xyz": [
+    0.0072,
+    0.079,
+    -0.7046
+   ]
+  },
+  {
+   "name": "LBPH",
+   "projects": [
+    "libralink"
+   ],
+   "xyz": [
+    0.0908,
+    0.407,
+    0.2315
+   ]
+  },
+  {
+   "name": "LLM",
+   "projects": [
+    "agentic-rag",
+    "outreach-mail-generator",
+    "personal-medical-chatbot",
+    "report-interview-integration",
+    "research-assistant-bot",
+    "voice-agent"
+   ],
+   "xyz": [
+    -0.495,
+    -0.2378,
+    -0.1747
+   ]
+  },
+  {
+   "name": "LSTM",
+   "projects": [
+    "twitter-sentiment-analysis"
+   ],
+   "xyz": [
+    0.217,
+    0.0893,
+    -0.7036
+   ]
+  },
+  {
+   "name": "LangChain",
+   "projects": [
+    "agentic-rag",
+    "outreach-mail-generator",
+    "research-assistant-bot"
+   ],
+   "xyz": [
+    -0.4664,
+    -0.3461,
+    -0.1127
+   ]
+  },
+  {
+   "name": "LangGraph",
+   "projects": [
+    "agentic-rag"
+   ],
+   "xyz": [
+    -0.6252,
+    0.0882,
+    -0.1287
+   ]
+  },
+  {
+   "name": "LiveKit",
+   "projects": [
+    "voice-agent"
+   ],
+   "xyz": [
+    -0.393,
+    0.073,
+    -0.3959
+   ]
+  },
+  {
+   "name": "Llama 3",
+   "projects": [
+    "research-assistant-bot"
+   ],
+   "xyz": [
+    -0.4223,
+    -0.0854,
+    -0.3064
+   ]
+  },
+  {
+   "name": "Llama3",
+   "projects": [
+    "outreach-mail-generator"
+   ],
+   "xyz": [
+    -0.3332,
+    -0.7055,
+    -0.2109
+   ]
+  },
+  {
+   "name": "LlamaCPP",
+   "projects": [
+    "personal-medical-chatbot"
+   ],
+   "xyz": [
+    -0.6591,
+    -0.3648,
+    -0.4251
+   ]
+  },
+  {
+   "name": "LlamaIndex",
+   "projects": [
+    "personal-medical-chatbot"
+   ],
+   "xyz": [
+    -0.4806,
+    -0.1997,
+    -0.3626
+   ]
+  },
+  {
+   "name": "ML",
+   "projects": [
+    "pyspark-ml"
+   ],
+   "xyz": [
+    0.418,
+    -0.4519,
+    -0.2203
+   ]
+  },
+  {
+   "name": "MLflow",
+   "projects": [
+    "credit-risk-model"
+   ],
+   "xyz": [
+    0.5548,
+    -0.3383,
+    -0.0386
+   ]
+  },
+  {
+   "name": "MLlib",
+   "projects": [
+    "pyspark-ml"
+   ],
+   "xyz": [
+    0.3166,
+    -0.3035,
+    -0.1117
+   ]
+  },
+  {
+   "name": "Matrix Factorization",
+   "projects": [
+    "movie-recommendation-coursera"
+   ],
+   "xyz": [
+    0.0964,
+    0.8634,
+    0.3349
+   ]
+  },
+  {
+   "name": "Milvus",
+   "projects": [
+    "agentic-rag"
+   ],
+   "xyz": [
+    -0.5891,
+    0.1092,
+    -0.0627
+   ]
+  },
+  {
+   "name": "MobileNet",
+   "projects": [
+    "plant-disease-detection"
+   ],
+   "xyz": [
+    0.3695,
+    -0.3504,
+    -0.4541
+   ]
+  },
+  {
+   "name": "MySQL",
+   "projects": [
+    "adhoc-insights-consumer-goods",
+    "fnb-oop",
+    "libralink"
+   ],
+   "xyz": [
+    -0.0787,
+    -0.1473,
+    0.4801
+   ]
+  },
+  {
+   "name": "NLP",
+   "projects": [
+    "patient-condition-classification",
+    "simple-personal-chatbot",
+    "twitter-sentiment-analysis"
+   ],
+   "xyz": [
+    -0.0967,
+    -0.0173,
+    -0.5562
+   ]
+  },
+  {
+   "name": "OOPs",
+   "projects": [
+    "fnb-oop"
+   ],
+   "xyz": [
+    -0.0401,
+    -0.3794,
+    0.5643
+   ]
+  },
+  {
+   "name": "OpenAI",
+   "projects": [
+    "agentic-rag"
+   ],
+   "xyz": [
+    -0.6564,
+    -0.1729,
+    -0.0525
+   ]
+  },
+  {
+   "name": "OpenCV",
+   "projects": [
+    "billionaires-image-classification",
+    "libralink",
+    "vision-qc"
+   ],
+   "xyz": [
+    0.2213,
+    -0.311,
+    0.1419
+   ]
+  },
+  {
+   "name": "Pipecat",
+   "projects": [
+    "voice-agent"
+   ],
+   "xyz": [
+    -0.4127,
+    -0.2229,
+    -0.423
+   ]
+  },
+  {
+   "name": "PySpark",
+   "projects": [
+    "pyspark-ml"
+   ],
+   "xyz": [
+    0.4075,
+    -0.1557,
+    -0.1969
+   ]
+  },
+  {
+   "name": "Qdrant",
+   "projects": [
+    "voice-agent"
+   ],
+   "xyz": [
+    -0.4283,
+    0.0716,
+    -0.3902
+   ]
+  },
+  {
+   "name": "Qwen3-VL",
+   "projects": [
+    "vision-qc"
+   ],
+   "xyz": [
+    0.3088,
+    -0.6827,
+    0.2856
+   ]
+  },
+  {
+   "name": "RAG",
+   "projects": [
+    "agentic-rag",
+    "personal-medical-chatbot"
+   ],
+   "xyz": [
+    -0.6781,
+    -0.1073,
+    -0.2118
+   ]
+  },
+  {
+   "name": "Real-time",
+   "projects": [
+    "voice-agent"
+   ],
+   "xyz": [
+    -0.2926,
+    -0.0681,
+    -0.3266
+   ]
+  },
+  {
+   "name": "Recommender System",
+   "projects": [
+    "movie-recommendation-coursera",
+    "movie-recommendation"
+   ],
+   "xyz": [
+    0.1278,
+    0.7582,
+    0.3562
+   ]
+  },
+  {
+   "name": "ResNet",
+   "projects": [
+    "plant-disease-detection"
+   ],
+   "xyz": [
+    0.4452,
+    -0.3789,
+    -0.4152
+   ]
+  },
+  {
+   "name": "Resampling Techniques",
+   "projects": [
+    "credit-card-fraud-detection"
+   ],
+   "xyz": [
+    0.6781,
+    -0.297,
+    -0.2511
+   ]
+  },
+  {
+   "name": "Rule-based",
+   "projects": [
+    "simple-personal-chatbot"
+   ],
+   "xyz": [
+    -0.355,
+    -0.0862,
+    -0.6262
+   ]
+  },
+  {
+   "name": "SGLang",
+   "projects": [
+    "voice-agent"
+   ],
+   "xyz": [
+    -0.3648,
+    -0.0699,
+    -0.5625
+   ]
+  },
+  {
+   "name": "SVM",
+   "projects": [
+    "billionaires-image-classification"
+   ],
+   "xyz": [
+    0.3997,
+    -0.6041,
+    -0.0304
+   ]
+  },
+  {
+   "name": "Scikit-Learn",
+   "projects": [
+    "plant-disease-detection"
+   ],
+   "xyz": [
+    0.4465,
+    -0.6239,
+    -0.4341
+   ]
+  },
+  {
+   "name": "Scikit-learn",
+   "projects": [
+    "credit-card-fraud-detection",
+    "credit-risk-model",
+    "patient-condition-classification"
+   ],
+   "xyz": [
+    0.438,
+    -0.2672,
+    -0.1983
+   ]
+  },
+  {
+   "name": "Self-hosted",
+   "projects": [
+    "vision-qc",
+    "voice-agent"
+   ],
+   "xyz": [
+    -0.025,
+    -0.4756,
+    -0.0835
+   ]
+  },
+  {
+   "name": "Streamlit",
+   "projects": [
+    "movie-recommendation",
+    "outreach-mail-generator",
+    "patient-condition-classification",
+    "research-assistant-bot"
+   ],
+   "xyz": [
+    -0.1064,
+    -0.0901,
+    -0.1153
+   ]
+  },
+  {
+   "name": "TF Serving",
+   "projects": [
+    "plant-disease-detection"
+   ],
+   "xyz": [
+    0.2591,
+    -0.442,
+    -0.5396
+   ]
+  },
+  {
+   "name": "TTS",
+   "projects": [
+    "voice-agent"
+   ],
+   "xyz": [
+    -0.389,
+    -0.2213,
+    -0.4112
+   ]
+  },
+  {
+   "name": "Tableau",
+   "projects": [
+    "adhoc-insights-consumer-goods"
+   ],
+   "xyz": [
+    -0.3014,
+    -0.2859,
+    0.5801
+   ]
+  },
+  {
+   "name": "TensorFlow",
+   "projects": [
+    "libralink",
+    "movie-recommendation-coursera",
+    "simple-personal-chatbot",
+    "speech-emotion-recognition",
+    "twitter-sentiment-analysis"
+   ],
+   "xyz": [
+    0.0124,
+    0.2078,
+    -0.2624
+   ]
+  },
+  {
+   "name": "Text-to-SQL",
+   "projects": [
+    "agentic-rag"
+   ],
+   "xyz": [
+    -0.5213,
+    0.0316,
+    -0.0888
+   ]
+  },
+  {
+   "name": "Tkinter",
+   "projects": [
+    "libralink"
+   ],
+   "xyz": [
+    0.0151,
+    0.1274,
+    0.1688
+   ]
+  },
+  {
+   "name": "VLM",
+   "projects": [
+    "vision-qc"
+   ],
+   "xyz": [
+    0.3781,
+    -0.7162,
+    0.2131
+   ]
+  },
+  {
+   "name": "Vertex AI",
+   "projects": [
+    "vision-qc",
+    "voice-agent"
+   ],
+   "xyz": [
+    -0.0987,
+    -0.4776,
+    -0.0739
+   ]
+  },
+  {
+   "name": "Word2Vec",
+   "projects": [
+    "patient-condition-classification"
+   ],
+   "xyz": [
+    0.0643,
+    -0.075,
+    -0.549
+   ]
+  },
+  {
+   "name": "XGBoost",
+   "projects": [
+    "credit-card-fraud-detection",
+    "patient-condition-classification"
+   ],
+   "xyz": [
+    0.3508,
+    -0.3031,
+    -0.312
+   ]
+  },
+  {
+   "name": "vLLM",
+   "projects": [
+    "vision-qc",
+    "voice-agent"
+   ],
+   "xyz": [
+    -0.081,
+    -0.4078,
+    -0.0981
+   ]
+  }
+ ]
+}

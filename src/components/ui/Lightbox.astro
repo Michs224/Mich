@@ -1,0 +1,61 @@
+---
+// Opens the page's pictures larger (a.zoom links and pictures in the Markdown body), in a modal
+// dialog that closes with Escape, the close button, or a click beside the picture.
+import Icon from './Icon.astro';
+---
+<dialog class="lightbox" aria-label="Larger picture">
+  <button type="button" class="close" aria-label="Close"><Icon name="x" /></button>
+</dialog>
+
+<script>
+  import '../../scripts/lightbox';
+</script>
+
+<style>
+  .lightbox {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: clamp(16px, 4vw, 56px);
+    border: 0;
+    background: transparent;
+    overscroll-behavior: contain;
+  }
+  .lightbox[open] { display: grid; place-items: center; }
+  .lightbox::backdrop { background: rgb(6 16 15 / 0.88); }
+  /* The script adds the picture, so it carries no scoped attribute. */
+  .lightbox :global(img) {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: var(--radius-control);
+    background: var(--diagram-bg);
+    box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.6);
+  }
+  .close {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.14);
+    color: #fff;
+    font-size: 1.25rem;
+  }
+  .close:hover { background: rgb(255 255 255 / 0.26); }
+  .close:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+  :global(html:has(.lightbox[open])) { overflow: hidden; }
+
+  /* The picture grows out of the page; it answers the click (02 §10). */
+  @media (prefers-reduced-motion: no-preference) {
+    .lightbox[open] :global(img) { animation: lightbox-in 280ms var(--ease); }
+    .lightbox[open]::backdrop { animation: lightbox-fade 280ms var(--ease); }
+  }
+  @keyframes lightbox-in { from { opacity: 0; transform: scale(0.94); } }
+  @keyframes lightbox-fade { from { opacity: 0; } }
+</style>

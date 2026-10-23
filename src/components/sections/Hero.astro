@@ -1,0 +1,56 @@
+---
+import Button from '../ui/Button.astro';
+import EmbeddingMap from '../ui/EmbeddingMap.astro';
+import { site } from '../../data/site';
+---
+<section id="top" class="hero wrap" aria-labelledby="hero-title">
+  <div class="hero-copy">
+    <h1 id="hero-title" class="t-hero">I build AI that listens, sees, and answers.</h1>
+    <p class="t-lead t-muted rise" style="--d: 80ms">
+      AI engineer building real-time voice agents, vision QC, and agentic RAG, measured before they ship.
+    </p>
+    <div class="hero-actions rise" style="--d: 160ms">
+      <Button href="#projects" variant="primary">View projects</Button>
+      <Button href={site.resumePath} variant="secondary" download label="Download resume (PDF)">Download resume</Button>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <EmbeddingMap priority />
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    gap: 40px;
+    padding-block: 40px 64px;
+  }
+  .hero-copy { display: grid; gap: 20px; align-content: center; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+  /* On phones the two buttons stack at one full width instead of wrapping at two widths. */
+  @media (max-width: 479px) { .hero-actions { display: grid; } }
+  .hero-visual { width: 100%; max-width: 560px; }
+
+  @media (min-width: 1024px) {
+    .hero {
+      grid-template-columns: 7fr 5fr;
+      align-items: center;
+      gap: 48px;
+      padding-block: 48px 64px;
+      min-height: min(calc(100dvh - var(--header-h)), 820px);
+    }
+    .hero-visual { justify-self: end; }
+  }
+
+  /* Only the subtitle and actions move; the h1 and the poster are LCP candidates (02 §10 #1). */
+  @media (prefers-reduced-motion: no-preference) {
+    .rise {
+      animation: rise 0.6s var(--ease) both;
+      animation-delay: var(--d, 0ms);
+    }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
+  }
+</style>

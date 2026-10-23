@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+---
+<BaseLayout
+  title="Page not found · Michael Geraldin Wijaya"
+  description="This page does not exist. The portfolio of Michael Geraldin Wijaya, AI engineer, is on the home page."
+  noindex
+>
+  <section class="missing wrap" aria-labelledby="missing-title">
+    <h1 id="missing-title" class="t-hero">Page not found</h1>
+    <p class="t-lead t-muted">
+      Nothing lives at this address. If the link came from the old site, everything it had is on the home
+      page now.
+    </p>
+    <div class="actions">
+      <Button href="/" variant="primary">Go to the home page</Button>
+      <Button href="/#projects" variant="secondary">View projects</Button>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .missing {
+    display: grid;
+    gap: 20px;
+    align-content: center;
+    min-height: calc(100dvh - var(--header-h) - 160px);
+    padding-block: 64px;
+  }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+  @media (max-width: 479px) { .actions { display: grid; } }
+</style>

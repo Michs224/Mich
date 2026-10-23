@@ -1,0 +1,24 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from '../../lib/icons';
+
+interface Props {
+  href: string;
+  variant: 'primary' | 'secondary' | 'on-block';
+  size?: 'md' | 'sm';
+  icon?: IconName;
+  download?: boolean;
+  /** Becomes aria-label when the visible text alone is not specific enough. */
+  label?: string;
+}
+const { href, variant, size = 'md', icon, download = false, label } = Astro.props;
+---
+<a
+  class:list={['btn', `btn-${variant}`, { 'btn-sm': size === 'sm' }]}
+  href={href}
+  download={download || undefined}
+  aria-label={label}
+>
+  {icon && <Icon name={icon} />}
+  <span><slot /></span>
+</a>

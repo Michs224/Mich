@@ -1,0 +1,111 @@
+---
+// One card per featured project, all built the same way, so a new project needs no layout work.
+import ProjectMedia from '../ui/ProjectMedia.astro';
+import { DOMAIN_LABELS, getFeatured } from '../../lib/content';
+import { getMap } from '../../lib/map';
+
+const featured = await getFeatured();
+const map = await getMap();
+---
+<section id="projects" class="section wrap" aria-labelledby="work-title">
+  <h2 id="work-title" class="t-h2 section-title">Projects</h2>
+  <div class="cards">
+    {featured.map((project) => {
+      const { id, data } = project;
+      return (
+        <article class="card" style={`--field: var(--field-${data.domain})`}>
+          <ProjectMedia project={project} map={map} sizes="(min-width: 1320px) 400px, (min-width: 1024px) 31vw, (min-width: 768px) 46vw, 100vw" />
+          <div class="body">
+            <p class="field t-small">{DOMAIN_LABELS[data.domain]}</p>
+            <h3 class="t-h3">
+              <a href={`/work/${id}`} style={`view-transition-name: work-${id}`}>{data.title}</a>
+            </h3>
+            <p class="summary t-muted">{data.summary}</p>
+            <p class="stack">
+              <span class="sr-only">Key tools: </span>
+              {(data.keyStack.length > 0 ? data.keyStack : data.tags.slice(0, 4)).map((tool, i) => (
+                <>{i > 0 && ', '}<span class="id" translate="no">{tool}</span></>
+              ))}
+            </p>
+            <p class="foot">
+              {data.status === 'in-progress' && <span class="status">In progress</span>}
+              <span class="more" aria-hidden="true">View project</span>
+            </p>
+          </div>
+        </article>
+      );
+    })}
+  </div>
+</section>
+
+<style>
+  .cards { display: grid; gap: 16px; }
+  @media (min-width: 768px) {
+    .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1024px) {
+    .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: var(--radius-frame);
+    background: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--hair);
+  }
+  .body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 14px;
+    padding: 22px 24px 28px;
+  }
+  @media (min-width: 768px) { .body { padding: 24px 28px 32px; } }
+
+  /* The picture leans in when the card is pointed at or focused; it answers the visitor (02 §10). */
+  @media (prefers-reduced-motion: no-preference) {
+    .card :global(.media > *) { transition: transform 700ms var(--ease); }
+    .card:is(:hover, :focus-within) :global(.media > *) { transform: scale(1.045); }
+  }
+
+  /* The field, in its embedding map color. */
+  .field { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+  .field::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--field);
+  }
+
+  h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  /* One link per card: its hit area covers the whole card. */
+  h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+  h3 a:focus-visible { outline: none; }
+  .card:has(h3 a:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  .summary { max-width: 60ch; }
+  /* Names can contain spaces ("AWS Bedrock"), so they are a comma-separated list that never splits a name. */
+  .stack { font-size: 0.9375rem; line-height: 1.7; }
+  .stack .id { white-space: nowrap; }
+  .foot { display: flex; align-items: center; gap: 16px; margin-top: auto; padding-top: 4px; font-weight: 600; }
+  .status {
+    padding: 3px 10px;
+    border-radius: var(--radius-control);
+    background: var(--tint);
+    font-size: 0.875rem;
+  }
+  .more { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+  .card:hover .more { text-decoration-thickness: 2px; }
+</style>

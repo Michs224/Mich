@@ -1,0 +1,318 @@
+---
+// Signature section (02 §8): one sales-rep sentence moving through the voice agent pipeline.
+// The default is a static, fully visible list. Scroll-driven motion is layered on top only where
+// scroll timelines exist, motion is allowed, and the screen is at least 768px wide.
+import { getEntry } from 'astro:content';
+
+const project = await getEntry('projects', 'voice-agent');
+const steps = project?.data.trace ?? [];
+if (steps.length < 3) throw new Error('voice-agent.md needs a trace with at least 3 steps (02 §8).');
+
+const SPEAKER = { rep: 'Sales rep', agent: 'AI customer', system: undefined } as const;
+// Speech is quoted. A tool call may wrap after its opening parenthesis instead of mid-word.
+const outputs = steps.map((step): { text: string; rest?: string } => {
+  if (step.kind === 'speech') return { text: `“${step.output}”` };
+  const at = step.kind === 'tool' ? step.output.indexOf('(') + 1 : 0;
+  return at > 0 ? { text: step.output.slice(0, at), rest: step.output.slice(at) } : { text: step.output };
+});
+---
+<section id="trace" class="trace" aria-labelledby="trace-title" style={`--n: ${steps.length}`}>
+  <div class="trace-track">
+    <div class="trace-stage">
+      <canvas class="trace-canvas" aria-hidden="true"></canvas>
+      <div class="wrap trace-inner">
+        <header class="trace-head">
+          <h2 id="trace-title" class="t-h2">One sentence through the voice agent</h2>
+          <p class="t-lead">A sales rep says one line. This is what the AI customer does with it.</p>
+        </header>
+
+        <div class="trace-body">
+          <div class="rail" aria-hidden="true"><span class="rail-fill"></span></div>
+          <ol class="trace-steps">
+            {steps.map((step, i) => (
+              <li class:list={['trace-step', { 'is-first': i === 0, 'is-last': i === steps.length - 1 }]} style={`--i: ${i}`}>
+                <div class="step-head">
+                  <span class="step-dot" aria-hidden="true"><span class="step-dot-fill"></span></span>
+                  <span class="step-name">
+                    <span class="step-label">{step.label}</span>{' '}
+                    {step.tech && <span class="step-tech id" translate="no">{step.tech}</span>}
+                  </span>
+                </div>
+                <div class:list={['step-panel', `is-${step.kind}`]}>
+                  {step.speaker && SPEAKER[step.speaker] && <p class="speaker t-small">{SPEAKER[step.speaker]}</p>}
+                  <p class="output" translate={step.kind === 'tool' ? 'no' : undefined}>
+                    {outputs[i].text}{outputs[i].rest !== undefined && <><wbr />{outputs[i].rest}</>}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <p class="note t-small">
+          Example turn, simplified. Scenario details are illustrative.<span class="terrain-note">{' '}The background is a spectrogram of the rep’s line, read by a text-to-speech voice.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { mountSpectrogram } from '../../scripts/spectrogram/mount';
+  const trace = document.getElementById('trace');
+  if (trace) mountSpectrogram(trace);
+</script>
+
+<style>
+  /* Filled from 0 to 1 by the Trace scroll timeline; the spectrogram terrain reads it on
+     .trace-track (02 §8c). Not inherited: nothing below reads it, so a frame of scrolling
+     restyles one element instead of the whole section. */
+  @property --trace-progress {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 0;
+  }
+
+  .trace {
+    --focus: var(--accent);
+    background: var(--block);
+    color: var(--on-block);
+  }
+  .trace-inner { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; padding-block: 64px; }
+  @media (min-width: 768px) { .trace-inner { padding-block: 96px; } }
+  .trace-head { display: grid; gap: 12px; }
+  .trace-head .t-lead { color: var(--on-block-muted); }
+  .note { color: var(--on-block-muted); }
+
+  /* ---------- Static list: the default everywhere ---------- */
+  .trace-body { position: relative; }
+  .rail {
+    position: absolute;
+    left: 7px;
+    top: 10px;
+    bottom: 10px;
+    width: 2px;
+    background: var(--on-block-track);
+  }
+  .rail-fill {
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform-origin: top;
+  }
+  .trace-steps { display: grid; gap: 28px; padding: 0; list-style: none; position: relative; }
+  .trace-step { display: grid; gap: 10px; }
+  /* The dot keeps its own column, so a tool name that wraps lines up under the label instead of
+     running over the rail. */
+  .step-head { display: grid; grid-template-columns: 16px minmax(0, 1fr); align-items: start; column-gap: 16px; }
+  .step-name { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; }
+  .step-dot {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    margin-top: 0.35em; /* centered on the first line of the label */
+    border-radius: 50%;
+    background: var(--block);
+    box-shadow: inset 0 0 0 2px var(--accent);
+  }
+  .step-panel { margin-left: 32px; }
+  .step-dot-fill { position: absolute; inset: 4px; border-radius: 50%; background: var(--accent); }
+  .step-label { font-weight: 700; font-size: 1.125rem; }
+  .step-tech { color: var(--on-block-muted); }
+
+  .step-panel {
+    display: grid;
+    gap: 6px;
+    padding: 16px 20px;
+    border-radius: var(--radius-frame);
+    background: var(--block-panel);
+    box-shadow: inset 0 0 0 1px var(--on-block-hair);
+  }
+  .speaker { color: var(--on-block-muted); font-weight: 600; }
+  /* Tool calls are long unbroken tokens; let them wrap instead of widening the page. */
+  .output { font-size: 1.125rem; line-height: 1.5; overflow-wrap: anywhere; }
+  .is-speech .output { font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem); font-weight: 600; }
+  .is-text .output,
+  .is-tool .output { font-variation-settings: "MONO" 1; font-size: 1rem; }
+  .is-tool .output { overflow-wrap: break-word; }
+
+  /* On wide screens the static list puts each output beside its step, not under it. The pinned
+     version below sets its own layout. */
+  @media (min-width: 1024px) {
+    .trace-step { grid-template-columns: 300px minmax(0, 760px); column-gap: 32px; align-items: start; }
+    .step-panel { margin-left: 0; }
+  }
+
+  /* Still terrain (spectrogram/mount.ts): where the stage does not pin (reduced motion, no scroll
+     timelines, a short window), the terrain is drawn once, finished, as a band under the list.
+     The canvas keeps the stage's shape, so the terrain sits in its lower part as it does there. */
+  .trace.is-still .trace-stage { position: relative; isolation: isolate; }
+  .trace.is-still .trace-inner { padding-bottom: 21vw; }
+  .trace.is-still .trace-canvas {
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: -1;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    pointer-events: none;
+    mask-image: linear-gradient(to bottom, transparent 55%, #000 78%);
+  }
+  .trace.is-still .terrain-note { display: inline; }
+
+  /* The terrain and its note appear only once mount.ts has drawn the first frame. */
+  .trace-canvas,
+  .terrain-note { display: none; }
+
+  /* ---------- Scroll-driven version (02 §8, 02 §10 #5) ----------
+     Longhand animation properties on purpose: the CSS minifier folds a shorthand that sits
+     next to animation-timeline into one declaration Chrome rejects (a lesson from an earlier
+     project). The pinned stage needs about 560px of height for its text, so shorter screens
+     (phones in landscape, small laptop windows) keep the static list; spectrogram/mount.ts
+     uses the same 640px line. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) and (min-width: 768px) and (min-height: 640px) {
+      .trace-track {
+        height: calc(100dvh + var(--n) * 45vh);
+        view-timeline-name: --trace;
+        view-timeline-axis: block;
+        animation-name: trace-progress;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: --trace;
+        animation-range: contain 0% contain 100%;
+      }
+      .trace-stage {
+        position: sticky;
+        top: var(--header-h);
+        height: calc(100dvh - var(--header-h));
+        display: grid;
+        align-items: center;
+        overflow: hidden;
+        isolation: isolate; /* keeps the terrain's z-index: -1 above the block background */
+      }
+      .trace.is-live .trace-canvas {
+        display: block;
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        /* Clear down to the end of the text (--text-bottom, from mount.ts), then the far rows fade in. */
+        mask-image: linear-gradient(
+          to bottom,
+          transparent max(var(--text-bottom, 0px), 45%),
+          #000 max(calc(var(--text-bottom, 0px) + min(96px, (100% - var(--text-bottom, 0px)) / 2)), 72%)
+        );
+        animation-name: terrain-in;
+        animation-duration: 0.9s;
+        animation-timing-function: var(--ease);
+      }
+      .trace.is-live .terrain-note { display: inline; }
+      /* Grid items with auto margins shrink to content; keep the wrap full width. */
+      .trace-inner { padding-block: 24px; width: 100%; }
+      /* Where the terrain can load, the text sits high and the terrain runs along the bottom. */
+      @media (min-width: 1024px) {
+        .trace-stage { align-items: start; }
+        .trace-inner { padding-top: 48px; }
+      }
+
+      /* The step list and the panel share one row. On tablets the list narrows so the panel has
+         room to read (it was 236px wide at 768px). */
+      .trace { --list-w: 420px; --panel-gap: 48px; }
+      @media (max-width: 1023px) {
+        .trace { --list-w: 300px; --panel-gap: 32px; }
+      }
+      .trace-body { max-width: var(--list-w); }
+      .rail { bottom: auto; height: calc(100% - 20px); }
+      .trace-steps { gap: 18px; }
+      .trace-step { grid-template-columns: minmax(0, 1fr); }
+      /* Every panel sits in the same spot to the right of the step list and they crossfade. */
+      .step-panel {
+        position: absolute;
+        top: 0;
+        left: calc(100% + var(--panel-gap));
+        width: min(
+          760px,
+          calc(var(--content-max) - var(--list-w) - var(--panel-gap)),
+          calc(100vw - 2 * var(--gutter) - var(--list-w) - var(--panel-gap))
+        );
+        margin-left: 0;
+        opacity: 0;
+      }
+
+      .rail-fill {
+        animation-name: trace-rail;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: --trace;
+        animation-range: contain 0% contain 100%;
+      }
+      .step-label,
+      .step-dot-fill,
+      .step-panel {
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: --trace;
+        animation-range: contain calc(var(--i) / var(--n) * 100%) contain calc((var(--i) + 1) / var(--n) * 100%);
+      }
+      /* Only the label dims, and never below 60%: 4.9:1 on the block. The muted tool names would
+         drop under 4.5:1 at any dimming, so they stay as they are. */
+      .step-label { animation-name: trace-label; }
+      .step-dot-fill { animation-name: trace-dot; }
+      .step-panel { animation-name: trace-panel; }
+      .is-first .step-panel { animation-name: trace-panel-first; }
+      .is-last .step-panel { animation-name: trace-panel-last; }
+    }
+
+    /* Phones (02 §8): no pinning. Each stretch of the rail fills, and each dot lights, as its step
+       scrolls past the middle of the screen. */
+    @media (prefers-reduced-motion: no-preference) and (max-width: 767px) {
+      .rail-fill { display: none; }
+      .trace-step { position: relative; }
+      .trace-step:not(.is-last)::before {
+        content: '';
+        position: absolute;
+        left: 7px;
+        top: 10px;
+        bottom: -28px; /* through the gap to the next dot */
+        width: 2px;
+        background: var(--accent);
+        transform-origin: top;
+        animation-name: trace-rail;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: cover 40% cover 60%;
+      }
+      .step-dot-fill {
+        animation-name: trace-dot;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: entry 100% cover 50%;
+      }
+    }
+  }
+  @keyframes trace-progress { from { --trace-progress: 0; } to { --trace-progress: 1; } }
+  @keyframes terrain-in { from { opacity: 0; } }
+  @keyframes trace-rail { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes trace-label { from { opacity: 0.6; } 12%, to { opacity: 1; } }
+  @keyframes trace-dot { from { opacity: 0; } 12%, to { opacity: 1; } }
+  @keyframes trace-panel {
+    from { opacity: 0; transform: translateY(14px); }
+    15%, 85% { opacity: 1; transform: none; }
+    to { opacity: 0; transform: translateY(-14px); }
+  }
+  @keyframes trace-panel-first {
+    from, 85% { opacity: 1; transform: none; }
+    to { opacity: 0; transform: translateY(-14px); }
+  }
+  @keyframes trace-panel-last {
+    from { opacity: 0; transform: translateY(14px); }
+    15%, to { opacity: 1; transform: none; }
+  }
+</style>

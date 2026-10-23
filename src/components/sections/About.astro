@@ -1,0 +1,80 @@
+---
+// About (02 §7): prose with a byline. On wide screens the portrait, the owner's own photo cropped
+// square to head and shoulders at the source, fills the column beside the prose.
+import { Picture } from 'astro:assets';
+import portrait from '../../assets/portrait/profile.jpg';
+import { site } from '../../data/site';
+---
+<section id="about" class="section wrap" aria-labelledby="about-title">
+  <div class="about">
+    <h2 id="about-title" class="t-h2 section-title">About</h2>
+    <Picture
+      pictureAttributes={{ class: 'portrait' }}
+      src={portrait}
+      formats={['avif', 'webp']}
+      widths={[112, 224, 420, 840]}
+      sizes="(min-width: 1024px) 420px, 112px"
+      alt={site.name}
+    />
+    <div class="who">
+      <p class="name">{site.name}</p>
+      <p class="t-muted">AI engineer at Maknadata</p>
+    </div>
+    <div class="prose">
+      <p>
+        Most people call me Gerald. At Maknadata I build a voice agent that answers in real time, a
+        vision check for field photos, and an agent that chooses between documents and a database. I
+        also benchmark open and closed models on cost and on whether we can host them ourselves.
+      </p>
+      <p>
+        I’m working on a master’s in computer science at BINUS, focused on data science. Before
+        Maknadata, I tutored statistics and linear algebra for a semester.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Phones and tablets: a small portrait beside the name, the prose below. */
+  .about {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    grid-template-areas:
+      'title title'
+      'portrait who'
+      'prose prose';
+    align-items: center;
+    column-gap: 20px;
+  }
+  .about > :global(h2) { grid-area: title; }
+  .about :global(.portrait) { grid-area: portrait; }
+  .about :global(.portrait img) {
+    width: 112px;
+    height: 112px;
+    object-fit: cover;
+    border-radius: var(--radius-frame);
+    background: var(--tint);
+  }
+  .who { grid-area: who; }
+  .prose { grid-area: prose; margin-top: 28px; }
+
+  /* Wide screens: the text on seven columns, the portrait on the other five. */
+  @media (min-width: 1024px) {
+    .about {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      grid-template-areas:
+        'title portrait'
+        'who portrait'
+        'prose portrait';
+      grid-template-rows: auto auto 1fr;
+      align-items: start;
+      column-gap: 64px;
+    }
+    .about :global(.portrait) { justify-self: end; width: 100%; max-width: 420px; }
+    .about :global(.portrait img) { width: 100%; height: auto; aspect-ratio: 1; }
+    .prose { margin-top: 24px; }
+  }
+
+  .name { font-size: 1.25rem; font-weight: 700; }
+  .prose { display: grid; gap: 16px; max-width: 65ch; font-size: 1.0625rem; line-height: 1.65; }
+</style>
