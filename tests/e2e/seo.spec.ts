@@ -68,6 +68,8 @@ test('404 is noindex', async ({ page }) => {
 test('404 points home without talking about the old site', async ({ page }) => {
   await page.goto('/this-page-does-not-exist');
   await expect(page.locator('main')).not.toContainText(/old site/i);
+  // It says why, not only that: the likely causes, in one line (owner, 2026-10-25).
+  await expect(page.locator('main .t-lead')).toHaveText('The address may be mistyped, or the link may be out of date.');
   await expect(page.locator('main').getByRole('link', { name: 'Go to the home page' })).toHaveAttribute('href', '/');
 });
 
