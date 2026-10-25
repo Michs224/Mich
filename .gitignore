@@ -2,3 +2,12 @@ agent_doc/
 CLAUDE.md
 ~$*
 .playwright-mcp/
+
+# Left in the folder by the v2 branch (the Astro site) when switching to this one.
+node_modules/
+dist/
+.astro/
+test-results/
+playwright-report/
+qa-screenshots/
+tools/embedding-map/.venv/
