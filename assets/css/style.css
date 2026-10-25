@@ -53,6 +53,9 @@ section {
     align-items: center;
     text-align: center;
     letter-spacing: 0.7rem;
+    /* Letter spacing also adds a gap after the last letter; the same gap on the left keeps the
+       words truly centered. */
+    padding-left: 0.7rem;
     color: #f5f5f5;
     font-style: italic;
     font-size: 4vw;
