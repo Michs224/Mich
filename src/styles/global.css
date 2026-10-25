@@ -1,0 +1,293 @@
+/* Reset, base type, and the few classes shared by many components (02 §4, §5). */
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+img, svg, video, canvas, picture { display: block; max-width: 100%; }
+img { height: auto; }
+input, button, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+/* Taps: no double-tap zoom wait, and a teal tint instead of the browser's grey box. */
+a, button, summary, label { touch-action: manipulation; -webkit-tap-highlight-color: rgb(11 107 100 / 0.12); }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.0625rem, 1.0405rem + 0.0939vw, 1.125rem);
+  line-height: 1.6;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 { text-wrap: balance; font-weight: 700; }
+p, li, dd { text-wrap: pretty; }
+
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: 2px; }
+
+::selection { background: var(--accent); color: var(--on-accent); }
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Layout ---------- */
+.wrap {
+  max-width: calc(var(--content-max) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.section { padding-block: 64px; }
+.section-title { margin-bottom: 40px; }
+/* Two sections meet with twice this between them, so wide screens stop at 96px each. */
+@media (min-width: 768px) { .section { padding-block: 80px; } }
+@media (min-width: 1280px) { .section { padding-block: 96px; } }
+
+/* ---------- Type scale: 375px → 1440px (02 §4), one step up from the plan: the owner found the
+   text small (2026-10-25). Running text never goes under 14px. ---------- */
+.t-hero {
+  font-size: clamp(2.5rem, 1.972rem + 2.254vw, 4rem);
+  font-weight: 780;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+}
+.t-case {
+  font-size: clamp(2.25rem, 1.81rem + 1.878vw, 3.5rem);
+  font-weight: 760;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+}
+.t-h2 {
+  font-size: clamp(2rem, 1.648rem + 1.502vw, 3rem);
+  font-weight: 720;
+  line-height: 1.1;
+  letter-spacing: -0.018em;
+}
+.t-h3 {
+  font-size: clamp(1.3125rem, 1.2025rem + 0.4695vw, 1.625rem);
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.t-metric {
+  font-size: clamp(2rem, 1.736rem + 1.127vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.t-lead {
+  font-size: clamp(1.1875rem, 1.1215rem + 0.2817vw, 1.375rem);
+  line-height: 1.55;
+  max-width: 60ch;
+}
+.t-body { max-width: 66ch; }
+.t-small { font-size: 0.9375rem; font-weight: 450; line-height: 1.5; }
+.t-muted { color: var(--muted); }
+
+/* Literal identifiers (model, tool, and stage names) use Recursive's MONO axis (02 §4). */
+.id {
+  font-variation-settings: "MONO" 1;
+  font-weight: 500;
+  /* Monospace reads large, so a little under its text; never under 14px. */
+  font-size: max(0.92em, 0.875rem);
+}
+
+/* Lemon highlighter under a number: a fill behind ink, never text (02 §3). */
+.mark {
+  --mark-size: 0.22em;
+  background: linear-gradient(var(--accent), var(--accent)) no-repeat left 92% / 100% var(--mark-size);
+  padding-bottom: 0.04em;
+}
+/* The lemon is 1.34:1 on light, so there it is a band. On dark it has far more contrast and the
+   same band reads as a heavy bar, so there it is a thin line just under the digits, whose baseline
+   sits about 0.95em down (owner's note, 2026-10-25). Browsers without light-dark() always show
+   the light theme. */
+@supports (color: light-dark(#000, #fff)) {
+  @media (prefers-color-scheme: dark) {
+    .mark { --mark-size: 0.07em; background-position: left 1.05em; padding-bottom: 0; }
+  }
+}
+
+/* ---------- Buttons: pills, with any icon in its own circle at the trailing end ----------
+   The shape rule: buttons are pills, panels use --radius-frame, small controls --radius-control.
+   On hover the icon circle leans toward where the button goes; pressed, the button gives a little. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding-inline: 1.375rem;
+  border: 0; /* a <button class="btn"> would keep the browser's border */
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: transform 0.25s var(--ease), background-color 0.2s, box-shadow 0.35s var(--ease), color 0.2s;
+}
+.btn:has(.btn-icon) { padding-inline-end: 6px; }
+.btn-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: light-dark(rgb(14 31 30 / 0.08), rgb(232 240 238 / 0.12));
+  transition: transform 0.45s var(--ease), background-color 0.2s;
+}
+.btn-primary .btn-icon { background: rgb(14 31 30 / 0.1); }
+.btn .icon { width: 1.125rem; height: 1.125rem; }
+.btn:active { transform: scale(0.98); }
+.btn-sm { min-height: 44px; padding-inline: 1.125rem; font-size: 0.9375rem; }
+.btn-primary { background: var(--accent); color: var(--on-accent); }
+.btn-primary:hover { box-shadow: var(--shadow-button); }
+.btn-secondary { color: var(--link); box-shadow: inset 0 0 0 1.5px var(--link); }
+.btn-secondary:hover { background: var(--tint); }
+/* Forced colors drop box-shadow and backgrounds, so buttons get a real border to stay buttons. */
+@media (forced-colors: active) {
+  .btn { border: 1px solid ButtonText; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn-primary:hover { transform: translateY(-1px); }
+  .btn:hover .btn-icon { transform: translate(2px, -1px) scale(1.06); }
+  .btn:active { transform: scale(0.98); }
+}
+
+/* ---------- Panels set in a tray (double bezel) ----------
+   A tray with a hairline and a little padding holds the panel, like a plate in a machined frame.
+   The panel's radius is the tray's minus that padding, so the curves stay concentric. */
+.shell {
+  --tray: 6px;
+  padding: var(--tray);
+  border-radius: calc(var(--radius-frame) + var(--tray));
+  background: light-dark(rgb(14 31 30 / 0.035), rgb(232 240 238 / 0.04));
+  box-shadow: inset 0 0 0 1px var(--hair);
+}
+.core {
+  border-radius: var(--radius-frame);
+  background: var(--surface);
+  box-shadow:
+    inset 0 1px 0 light-dark(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.05)),
+    0 1px 2px light-dark(rgb(14 31 30 / 0.05), rgb(0 0 0 / 0.35)),
+    0 14px 34px -20px light-dark(rgb(14 31 30 / 0.25), rgb(0 0 0 / 0.65));
+}
+
+/* ---------- Blocks settle in as they scroll into view (02 §10) ----------
+   Opacity and a short rise, finished well before the block is fully on screen. With reduced
+   motion they only fade. */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation-name: settle-fade;
+    animation-timing-function: var(--ease);
+    animation-fill-mode: both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 55%;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { animation-name: settle; }
+  }
+}
+@keyframes settle { from { opacity: 0; transform: translateY(28px); } }
+@keyframes settle-fade { from { opacity: 0; } }
+
+/* ---------- Disclosures: a group with its own label, folded (the 2022 olympiads) ----------
+   One list is never cut in two; only a separate group folds. A caret turns as it opens, and the
+   disclosure opens by height where the browser can animate to auto (Motion #8, 02 §10). */
+details.more > summary {
+  display: inline-block;
+  padding-block: 10px;
+  color: var(--link);
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+}
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+/* The caret rides on the last word (.tail), so a wrapping summary never leaves it alone. */
+details.more > summary .tail { white-space: nowrap; }
+details.more > summary .icon { display: inline-block; width: 1.1em; height: 1.1em; margin-left: 6px; vertical-align: -0.2em; }
+details.more[open] > summary .icon { rotate: 180deg; }
+@media (prefers-reduced-motion: no-preference) {
+  details.more > summary .icon { transition: rotate 0.25s var(--ease); }
+  details.more { interpolate-size: allow-keywords; }
+  details.more::details-content {
+    block-size: 0;
+    overflow-y: clip;
+    transition: block-size 250ms var(--ease), content-visibility 250ms allow-discrete;
+  }
+  details.more[open]::details-content { block-size: auto; }
+}
+
+/* ---------- Page transitions: native, cross-document (02 §10 #4) ----------
+   The old page lifts away and the new one settles in, while a project's picture and title travel
+   from its card to its page (view-transition-name media-* and work-*). With reduced motion the
+   pages only cross-fade: nothing travels, so the names are switched off. */
+@view-transition { navigation: auto; }
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) { animation: 220ms var(--ease) both page-leave; }
+  ::view-transition-new(root) { animation: 400ms var(--ease) both page-arrive; }
+  ::view-transition-group(*) { animation-duration: 480ms; animation-timing-function: var(--ease); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [style*='view-transition-name'] { view-transition-name: none !important; }
+  ::view-transition-old(root) { animation: 200ms ease both page-fade-out; }
+  ::view-transition-new(root) { animation: 300ms ease both page-fade-in; }
+}
+@keyframes page-leave { to { opacity: 0; transform: translateY(-16px); } }
+@keyframes page-arrive { from { opacity: 0; transform: translateY(24px); } }
+@keyframes page-fade-out { to { opacity: 0; } }
+@keyframes page-fade-in { from { opacity: 0; } }
+
+/* ---------- Section titles: from machine text to language (02 §10) ----------
+   Each title arrives in Recursive's monospace, in the link color, and resolves into the sans as it
+   scrolls in. Only the MONO axis changes width, and a title never wraps from 768px up, so nothing
+   around it moves: the letters change shape in place, which reduced motion keeps too. Longhand:
+   the minifier folds a shorthand next to animation-timeline. */
+@supports (animation-timeline: view()) {
+  @media (min-width: 768px) {
+    .section h2.t-h2 {
+      white-space: nowrap;
+      animation-name: title-resolve;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 40%;
+    }
+  }
+}
+@keyframes title-resolve {
+  from { font-variation-settings: "MONO" 1; color: var(--link); }
+  to { font-variation-settings: "MONO" 0; color: var(--ink); }
+}
+
+/* ---------- Icons ---------- */
+.icon { display: inline-flex; width: 1.25em; height: 1.25em; flex: none; }
+.icon svg { width: 100%; height: 100%; }

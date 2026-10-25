@@ -1,0 +1,88 @@
+---
+// About (02 §7): prose with a byline. On wide screens the portrait, the owner's own photo cropped
+// square to head and shoulders at the source, fills the column beside the prose. The byline follows
+// the current role in Experience, so a new job is one edit there; the prose stays general, as on the
+// old site, and names no employer or project (owner's notes, 2026-10-25).
+import { Picture } from 'astro:assets';
+import portrait from '../../assets/portrait/profile.jpg';
+import { site } from '../../data/site';
+import { getCurrentRole } from '../../lib/content';
+
+const current = await getCurrentRole();
+---
+<section id="about" class="section wrap" aria-labelledby="about-title">
+  <div class="about">
+    <h2 id="about-title" class="t-h2 section-title">About</h2>
+    <Picture
+      pictureAttributes={{ class: 'portrait reveal' }}
+      src={portrait}
+      formats={['avif', 'webp']}
+      widths={[112, 224, 420, 840]}
+      sizes="(min-width: 1024px) 420px, 112px"
+      alt=""
+    />
+    <!-- The photo's alt is empty: the name is written right below, and an alt of the name made
+         screen readers and copied text say it twice. -->
+    <div class="who">
+      <p class="name">{site.name}</p>
+      <p class="t-muted">{current ? `${current.title} at ${current.org}` : site.role}</p>
+    </div>
+    <div class="prose">
+      <p>
+        Most people call me Gerald or Mich. I’ve always been curious about what data and AI make
+        possible, and I build AI solutions for real problems: a process that runs faster, an answer
+        that is easier to find, a decision made with better information.
+      </p>
+      <p>
+        I measure what I build before it ships, keep learning as the field moves, and enjoy working
+        with people who share what they know. If you’d like to build something together, write to me
+        below.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Phones and tablets: a small portrait beside the name, the prose below. */
+  .about {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    grid-template-areas:
+      'title title'
+      'portrait who'
+      'prose prose';
+    align-items: center;
+    column-gap: 20px;
+  }
+  .about > :global(h2) { grid-area: title; }
+  .about :global(.portrait) { grid-area: portrait; }
+  .about :global(.portrait img) {
+    width: 112px;
+    height: 112px;
+    object-fit: cover;
+    border-radius: var(--radius-frame);
+    background: var(--tint);
+  }
+  .who { grid-area: who; }
+  .prose { grid-area: prose; margin-top: 28px; }
+
+  /* Wide screens: the text on seven columns, the portrait on the other five. */
+  @media (min-width: 1024px) {
+    .about {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      grid-template-areas:
+        'title portrait'
+        'who portrait'
+        'prose portrait';
+      grid-template-rows: auto auto 1fr;
+      align-items: start;
+      column-gap: 64px;
+    }
+    .about :global(.portrait) { justify-self: end; width: 100%; max-width: 420px; }
+    .about :global(.portrait img) { width: 100%; height: auto; aspect-ratio: 1; }
+    .prose { margin-top: 24px; }
+  }
+
+  .name { font-size: 1.25rem; font-weight: 700; }
+  .prose { display: grid; gap: 16px; max-width: 65ch; font-size: 1.125rem; line-height: 1.65; }
+</style>

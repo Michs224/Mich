@@ -1,0 +1,51 @@
+---
+import Icon from '../ui/Icon.astro';
+import type { IconName } from '../../lib/icons';
+import { site } from '../../data/site';
+
+const year = new Date().getFullYear();
+const socials: { href: string; label: string; icon: IconName }[] = [
+  { href: site.socials.github, label: 'GitHub', icon: 'github-logo' },
+  { href: site.socials.linkedin, label: 'LinkedIn', icon: 'linkedin-logo' },
+  { href: site.socials.x, label: 'X', icon: 'x-logo' },
+  { href: site.socials.instagram, label: 'Instagram', icon: 'instagram-logo' },
+  { href: `mailto:${site.email}`, label: 'Email', icon: 'envelope-simple' },
+];
+---
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p class="t-small t-muted">© {year} {site.name}</p>
+    <ul class="socials" aria-label="Elsewhere">
+      {socials.map((item) => (
+        <li>
+          <a href={item.href} aria-label={item.label}><Icon name={item.icon} /></a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .site-footer { border-top: 1px solid var(--hair); }
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 32px;
+  }
+  /* The glyphs, not their 44px hit areas, line up with the content edges. */
+  .socials { display: flex; gap: 4px; margin-inline: -11px; list-style: none; padding: 0; }
+  .socials a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-control);
+    color: var(--ink);
+  }
+  .socials a:hover { background: var(--tint); }
+  .socials .icon { width: 1.375rem; height: 1.375rem; }
+</style>

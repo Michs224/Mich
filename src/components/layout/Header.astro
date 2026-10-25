@@ -1,0 +1,253 @@
+---
+import Button from '../ui/Button.astro';
+import { site } from '../../data/site';
+
+const links = [
+  { href: '/#projects', label: 'Projects' },
+  { href: '/#experience', label: 'Experience' },
+  { href: '/#about', label: 'About' },
+  { href: '/#contact', label: 'Contact' },
+];
+---
+<header class="site-header">
+  <div class="bar">
+    <a class="wordmark" href="/#top" translate="no">{site.name}</a>
+
+    <nav class="nav-wide" aria-label="Main">
+      <ul>
+        {links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="resume-wide">
+      <Button href={site.resumePath} variant="secondary" size="sm" download label="Download resume (PDF)">Resume</Button>
+    </div>
+
+    <!-- Below 1024px the nav lives in a <details>, so it opens without JavaScript. -->
+    <details class="nav-menu">
+      <summary>
+        <span class="burger" aria-hidden="true"><span></span><span></span></span>
+        <span class="when-closed">Menu</span><span class="when-open">Close</span>
+      </summary>
+      <div class="menu-panel">
+        <nav aria-label="Main">
+          <ul>
+            {links.map((link, i) => <li style={`--i: ${i}`}><a href={link.href}>{link.label}</a></li>)}
+            <li class="menu-resume" style={`--i: ${links.length}`}><a href={site.resumePath} download>Download resume (PDF)</a></li>
+          </ul>
+        </nav>
+      </div>
+    </details>
+  </div>
+</header>
+
+<script>
+  import '../../scripts/nav';
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    height: var(--header-h);
+    padding-inline: var(--gutter);
+  }
+  /* The page's scroll padding keeps focused content clear of this header, but Chrome also applies
+     it to the header's own controls and scrolls to "reveal" them, though they never leave the
+     screen: pressing Menu jumped the page by half a screen. A margin that cancels the padding
+     tells it they are already in view. :global, since Resume comes from Button.astro. */
+  .site-header :global(:is(a, summary, button)) { scroll-margin-top: -200px; }
+  /* With the menu open, the band around the pill is paper too, so no page shows through it. */
+  .site-header:has(.nav-menu[open]) { background: var(--paper); }
+
+  /* The navigation floats as a glass pill: across the page on small screens, centered and only as
+     wide as its links from 1024px. */
+  .bar {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    height: 52px;
+    margin-inline: auto;
+    padding-inline: 18px 6px;
+    border-radius: 999px;
+  }
+  @media (min-width: 1024px) {
+    .bar { width: fit-content; max-width: var(--content-max); gap: 12px; }
+  }
+  /* The frosted glass lives on a layer of the pill, not on the header or the pill: an element with
+     backdrop-filter becomes the containing block of its position: fixed descendants, which would
+     trap the full-screen menu panel inside the header. */
+  .bar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: color-mix(in oklab, var(--paper) 78%, transparent);
+    /* No hand-written -webkit- copy: the CSS minifier adds the prefix, and a manual one placed
+       after this line made it drop the standard property. */
+    backdrop-filter: blur(16px) saturate(150%);
+  }
+  @supports not (backdrop-filter: blur(1px)) {
+    .bar::before { background: var(--paper); }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .bar::before { background: var(--paper); backdrop-filter: none; }
+  }
+  /* The pill's edge, and a soft shadow that grows as the page scrolls under it (02 §10 #2). */
+  .bar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px var(--hair);
+    pointer-events: none;
+  }
+  /* Only the shadow changes, nothing moves, so reduced motion keeps it. */
+  @supports (animation-timeline: scroll()) {
+    .bar::after {
+      animation-name: header-lift;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll();
+      animation-range: 0 120px;
+    }
+  }
+  @keyframes header-lift {
+    to {
+      box-shadow:
+        inset 0 0 0 1px var(--hair),
+        0 14px 34px -16px light-dark(rgb(14 31 30 / 0.35), rgb(0 0 0 / 0.75));
+    }
+  }
+
+  .wordmark {
+    margin-right: auto;
+    color: var(--ink);
+    font-weight: 650;
+    font-size: 1rem;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  @media (min-width: 640px) {
+    .wordmark { font-size: 1.0625rem; }
+  }
+  @media (min-width: 1024px) {
+    .wordmark { margin-right: 8px; }
+  }
+  .wordmark:hover { color: var(--link); }
+
+  .nav-wide { display: none; }
+  .nav-wide ul { display: flex; gap: 2px; list-style: none; padding: 0; }
+  .nav-wide a,
+  .menu-panel a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .nav-wide a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding-inline: 14px;
+    border-radius: 999px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+  .nav-wide a:hover { background: var(--tint); }
+
+  .resume-wide { display: none; }
+  /* From 640px the bar shows its Resume pill, so the open menu does not repeat it. */
+  @media (min-width: 640px) {
+    .resume-wide { display: block; }
+    .menu-resume { display: none; }
+  }
+
+  .nav-menu summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+    padding-inline: 14px;
+    border-radius: 999px;
+    font-weight: 600;
+    list-style: none;
+    cursor: pointer;
+  }
+  .nav-menu summary::-webkit-details-marker { display: none; }
+  .nav-menu[open] .when-closed,
+  .nav-menu:not([open]) .when-open { display: none; }
+  .nav-menu summary:hover { background: var(--tint); }
+
+  /* Two lines that turn into a close mark when the menu opens. */
+  .burger { position: relative; width: 18px; height: 12px; }
+  .burger > span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    border-radius: 1px;
+    background: currentColor;
+    transition: transform 0.45s var(--ease);
+  }
+  .burger > span:first-child { top: 2px; }
+  .burger > span:last-child { top: 8.5px; }
+  .nav-menu[open] .burger > span:first-child { transform: translateY(3.25px) rotate(45deg); }
+  .nav-menu[open] .burger > span:last-child { transform: translateY(-3.25px) rotate(-45deg); }
+  @media (prefers-reduced-motion: reduce) {
+    .burger > span { transition: none; }
+  }
+
+  /* A full-screen sheet of glass under the pill; its links rise in one after another. */
+  .menu-panel {
+    position: fixed;
+    inset: var(--header-h) 0 0 0;
+    z-index: 30;
+    background: color-mix(in oklab, var(--paper) 86%, transparent);
+    backdrop-filter: blur(22px) saturate(140%);
+    padding: 24px var(--gutter);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  @supports not (backdrop-filter: blur(1px)) {
+    .menu-panel { background: var(--paper); }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .menu-panel { background: var(--paper); backdrop-filter: none; }
+  }
+  .menu-panel a:hover { color: var(--link); }
+  .menu-panel ul { list-style: none; padding: 0; display: grid; gap: 4px; }
+  .menu-panel a {
+    display: flex;
+    align-items: center;
+    min-height: 56px;
+    font-size: 1.375rem;
+    font-weight: 650;
+    border-bottom: 1px solid var(--hair);
+  }
+  /* With reduced motion the links only fade in, one after another. */
+  .nav-menu[open] .menu-panel li {
+    animation: menu-fade 0.45s var(--ease) both;
+    animation-delay: calc(60ms + var(--i) * 45ms);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .nav-menu[open] .menu-panel li { animation-name: menu-rise; animation-duration: 0.55s; }
+  }
+  @keyframes menu-rise { from { opacity: 0; transform: translateY(18px); } }
+  @keyframes menu-fade { from { opacity: 0; } }
+
+  @media (min-width: 1024px) {
+    .nav-wide { display: block; }
+    .nav-menu { display: none; }
+  }
+</style>

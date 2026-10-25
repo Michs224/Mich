@@ -1,0 +1,145 @@
+---
+// The home page's opening scene, a title card like the old site's "Data Enthusiast" splash (owner's
+// requests, 2026-10-25). On the page's own paper the name comes into focus, the title (site.role) is
+// typed large in the role line's own face and color, and the map's three field colors stream under
+// them as the old site's dots did. Then the name flies into the header's wordmark and the title into
+// the hero's role line, which carries on from it, while the paper fades and the hero comes in. The
+// gate in <head> (lib/intro.ts) decides whether it shows; scripts/intro.ts runs it. Without
+// JavaScript it is never seen. Decorative: the page under it is already there for screen readers.
+import { site } from '../../data/site';
+
+const words = site.name.split(' ');
+const letters = [...site.role];
+const fields = ['llm-voice', 'vision-audio', 'ml-data'];
+---
+<div class="intro" aria-hidden="true">
+  <span class="intro-paper"></span>
+  <p class="intro-name" translate="no">
+    {words.map((word, i) => (
+      <>
+        <span style={`--i: ${i}`}>{word}</span>{i < words.length - 1 && ' '}
+      </>
+    ))}
+  </p>
+  <p class="intro-title">{letters.map((letter, k) => <span style={`--k: ${k}`}>{letter}</span>)}</p>
+  <span class="intro-points">
+    {fields.map((field, n) => <span style={`--n: ${n}; background: var(--field-${field})`}></span>)}
+  </span>
+</div>
+
+<script>
+  import '../../scripts/intro';
+</script>
+
+<style>
+  .intro { display: none; }
+  :global(html.has-intro) .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    /* A safety net: if the script never runs, the curtain still goes, after the scene's own end. */
+    animation: intro-gone 0.4s 6s both;
+  }
+  .intro-paper { position: absolute; inset: 0; z-index: -1; background: var(--paper); }
+
+  /* Set like the header's wordmark (weight, spacing, one line), so its flight only has to scale it. */
+  .intro-name {
+    color: var(--ink);
+    /* 34px on wide screens, a step under the title (owner's note, 2026-10-25); on phones as large as
+       one line allows. */
+    font-size: min(2.125rem, 5.6vw);
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  /* Word by word, the name comes into focus. With reduced motion it does so in place; otherwise each
+     word also rises a little. */
+  .intro-name span {
+    display: inline-block;
+    animation: intro-focus 1.2s var(--ease) both;
+    animation-delay: calc(300ms + var(--i) * 280ms);
+  }
+
+  /* The title leads: set like the role line it lands in (machine text, link color, 600), only larger,
+     and typed letter by letter like it. Each letter's box is there from the start, so typing moves
+     nothing; the caret rides on the newest letter, then blinks on the last one. Letters appear in
+     place, so it types with reduced motion too. */
+  .intro-title {
+    --type-start: 1.1s;
+    --type-step: 110ms;
+    margin-top: 10px;
+    color: var(--link);
+    font-size: min(7.5rem, 12vw);
+    font-weight: 600;
+    font-variation-settings: "MONO" 1;
+    line-height: 1.1;
+    white-space: pre;
+  }
+  .intro-title span {
+    position: relative;
+    display: inline-block;
+    animation: intro-type 1ms calc(var(--type-start) + var(--k) * var(--type-step)) both;
+  }
+  .intro-title span::after {
+    content: '';
+    position: absolute;
+    top: calc(50% - 0.575em);
+    left: calc(100% + 0.083em);
+    width: 0.056em; /* the role line's 2px caret, at the role line's size */
+    height: 1.15em;
+    background: currentColor;
+    opacity: 0;
+    animation: intro-caret var(--type-step) calc(var(--type-start) + var(--k) * var(--type-step));
+  }
+  .intro-title span:last-child::after {
+    animation: intro-blink 0.9s linear calc(var(--type-start) + var(--k) * var(--type-step)) infinite;
+  }
+
+  /* Three points in the map's field colors, streaming as the old site's dots did; with reduced motion
+     they pulse in place, one after another. They come early and go slowly (a round takes 2.7 s, 1.5
+     times the first version's; owner's note, 2026-10-25), so a whole round shows before the card
+     leaves. */
+  .intro-points {
+    position: relative;
+    width: 80px;
+    height: 12px;
+    margin-top: 40px;
+    animation: intro-fade 0.6s 0.6s both;
+  }
+  .intro-points span {
+    position: absolute;
+    top: 0;
+    left: calc(var(--n) * 40px - 6px);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    animation: intro-pulse 2.7s ease-in-out calc(var(--n) * 0.9s) infinite both;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .intro-name span { animation-name: intro-rise; }
+    .intro-points span { left: -6px; animation: intro-stream 2.7s linear calc(var(--n) * -0.9s) infinite both; }
+  }
+  @keyframes intro-fade { from { opacity: 0; } }
+  @keyframes intro-focus { from { opacity: 0; filter: blur(12px); } }
+  @keyframes intro-rise { from { opacity: 0; filter: blur(12px); transform: translateY(0.35em); } }
+  @keyframes intro-type { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes intro-caret { from, to { opacity: 1; } }
+  @keyframes intro-blink {
+    0%, 50% { opacity: 1; }
+    50.01%, 100% { opacity: 0; }
+  }
+  @keyframes intro-pulse {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 1; }
+  }
+  @keyframes intro-stream {
+    0%, 100% { transform: translateX(0) scale(0); }
+    50% { transform: translateX(40px) scale(1); }
+    99.999% { transform: translateX(80px) scale(0); }
+  }
+  @keyframes intro-gone { to { opacity: 0; visibility: hidden; } }
+</style>

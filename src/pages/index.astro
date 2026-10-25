@@ -1,0 +1,58 @@
+---
+import { getImage } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/sections/Hero.astro';
+import SelectedWork from '../components/sections/SelectedWork.astro';
+import Experience from '../components/sections/Experience.astro';
+import Archive from '../components/sections/Archive.astro';
+import Research from '../components/sections/Research.astro';
+import About from '../components/sections/About.astro';
+import Contact from '../components/sections/Contact.astro';
+import portrait from '../assets/portrait/profile.jpg';
+import { site } from '../data/site';
+import { getCurrentRole, getEducation } from '../lib/content';
+
+// ProfilePage + Person (02 §15), built from the same data the page shows.
+const photo = await getImage({ src: portrait, width: 480, format: 'jpg' });
+const current = await getCurrentRole();
+const schools = [...new Set((await getEducation()).map(({ data }) => data.school))];
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  mainEntity: {
+    '@type': 'Person',
+    name: site.name,
+    alternateName: site.alternateName,
+    jobTitle: site.role,
+    url: site.url,
+    image: new URL(photo.src, site.url).href,
+    email: `mailto:${site.email}`,
+    address: { '@type': 'PostalAddress', addressLocality: 'Jakarta', addressCountry: 'ID' },
+    ...(current && { worksFor: { '@type': 'Organization', name: current.org } }),
+    alumniOf: schools.map((name) => ({ '@type': 'CollegeOrUniversity', name })),
+    knowsAbout: [
+      'Voice agents',
+      'Speech recognition',
+      'Large language models',
+      'Retrieval-augmented generation',
+      'Computer vision',
+      'Machine learning',
+    ],
+    sameAs: Object.values(site.socials),
+  },
+};
+---
+<BaseLayout
+  title="Michael Geraldin Wijaya | AI Engineer"
+  description="AI engineer building real-time voice agents, vision QC, and agentic AI systems, measured before they ship."
+  jsonLd={jsonLd}
+  intro
+>
+  <Hero />
+  <SelectedWork />
+  <Experience />
+  <Archive />
+  <Research />
+  <About />
+  <Contact />
+</BaseLayout>

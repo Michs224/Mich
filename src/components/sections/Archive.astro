@@ -1,0 +1,50 @@
+---
+// Every project that is not featured, grouped by field (02 §7). One colored line per group, in
+// the embedding map's field colors, and no rules between rows. Rows with code link to it. Every
+// row shows, unfolded (owner's decision, 2026-10-25), with its picture large (ArchiveRow).
+import ArchiveRow from '../ui/ArchiveRow.astro';
+import ExternalLabel from '../ui/ExternalLabel.astro';
+import { getArchiveGroups } from '../../lib/content';
+import { getMap } from '../../lib/map';
+import { site } from '../../data/site';
+
+const groups = await getArchiveGroups();
+const map = await getMap();
+---
+<section id="archive" class="section wrap" aria-labelledby="archive-title">
+  <h2 id="archive-title" class="t-h2 section-title">More projects</h2>
+  <div class="groups">
+    {groups.map((group) => (
+      <div class="group reveal" style={`--field: var(--field-${group.domain})`}>
+        <h3 class="group-title">{group.label}</h3>
+        <ul class="rows">
+          {group.items.map((project) => <ArchiveRow project={project} map={map} />)}
+        </ul>
+      </div>
+    ))}
+  </div>
+  <!-- The arrow stays on the last word, as on the rows (ExternalLabel). -->
+  <a class="all" href={`${site.socials.github}?tab=repositories`}>
+    <ExternalLabel text="All repositories on GitHub" />
+  </a>
+</section>
+
+<style>
+  /* One group under the other: each row is wide enough for a large picture beside its text. */
+  .group {
+    display: grid;
+    gap: 24px;
+    padding-top: 16px;
+    padding-bottom: 56px;
+    border-top: 2px solid var(--field);
+  }
+  .group-title { font-size: 1.25rem; font-weight: 650; }
+  .rows { display: grid; gap: 40px; padding: 0; list-style: none; }
+
+  /* Inline, not flex: as flex items, the text and its glued last word lost the space between them. */
+  .all {
+    display: inline-block;
+    padding-block: 12px;
+    font-weight: 600;
+  }
+</style>

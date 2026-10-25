@@ -1,0 +1,207 @@
+---
+// Experience timeline 8/12 with education beside it 4/12 (02 §7). Both lists are in time order,
+// newest first, so both are <ol>. Every bullet from the CV is here. As on the old site, an entry's
+// heading opens its bullets, the whole entry at once; the current role starts open. Like the CV and
+// the old site, an entry leads with its role (the latest is its heading), then the organization, as
+// Education beside it leads with the degree (owner's requests, 2026-10-25).
+import Icon from '../ui/Icon.astro';
+import { formatMonth, getEducation, getExperience } from '../../lib/content';
+
+const experience = await getExperience();
+const education = await getEducation();
+
+const period = (start: string, end?: string) => `${formatMonth(start)} - ${end ? formatMonth(end) : 'present'}`;
+---
+<section id="experience" class="section wrap" aria-labelledby="experience-title education-title">
+  <div class="columns">
+    <div>
+      <h2 id="experience-title" class="t-h2 section-title">Experience</h2>
+      <ol class="timeline">
+        {experience.map(({ data }, i) => (
+          <li class:list={['entry', 'reveal', { 'is-current': data.roles.some((role) => !role.end) }]}>
+            <details class="entry-details" open={i === 0}>
+              <summary class="entry-head">
+                {data.roles.map((role, k) => (
+                  <>
+                    {k === 0 ? <h3 class="t-h3 role-title">{role.title}</h3> : <span class="role-title">{role.title}</span>}{' '}
+                    <span class="role-period">{period(role.start, role.end)}</span>{' '}
+                  </>
+                ))}
+                <span class="toggle" aria-hidden="true"><Icon name="caret-down" /></span>
+                <span class="place">
+                  <span class="org">{data.org}</span>
+                  {data.location && <>{' '}<span class="location t-small t-muted">{data.location}</span></>}
+                </span>
+              </summary>
+              <ul class="bullets">
+                {/* "ASR → LLM → TTS" is one name: no-break spaces keep it from splitting at an arrow. */}
+                {data.bullets.map((bullet) => <li>{bullet.replaceAll(' → ', '\u00a0→\u00a0')}</li>)}
+              </ul>
+            </details>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    <div id="education">
+      <h2 id="education-title" class="t-h2 section-title">Education</h2>
+      <div class="shell reveal">
+      <ol class="degrees core">
+        {education.map(({ data }) => (
+          <li class="degree">
+            <h3 class="degree-title">{data.degree}</h3>
+            <p>{data.school}</p>
+            <p class="t-small t-muted">{data.start} - {data.end ?? 'present'}</p>
+            <dl class="facts t-small">
+              <dt>Focus</dt>
+              <dd>{data.focus}</dd>
+              {data.gpa && (
+                <>
+                  <dt>GPA</dt>
+                  <dd>{data.gpa}</dd>
+                </>
+              )}
+              {data.honors && (
+                <>
+                  <dt>Honors</dt>
+                  <dd>{data.honors.join(', ')}</dd>
+                </>
+              )}
+            </dl>
+          </li>
+        ))}
+      </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .columns { display: grid; gap: 64px; }
+  @media (min-width: 1024px) {
+    .columns { grid-template-columns: 8fr 4fr; gap: 48px; align-items: start; }
+    /* Education is far shorter than the experience beside it: it stays in view as that scrolls. */
+    #education { position: sticky; top: calc(var(--header-h) + 24px); }
+  }
+
+  /* ---------- Timeline: one rail, one dot per organization; the current one is filled ---------- */
+  .timeline { display: grid; gap: 48px; padding: 0; list-style: none; }
+  .entry { position: relative; display: grid; gap: 14px; padding-left: 36px; }
+  /* The rail, with a link-colored fill that draws down it as the entry scrolls by (02 §10). */
+  .entry::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 14px;
+    bottom: -48px; /* through the gap to the next dot */
+    width: 2px;
+    background: var(--hair) linear-gradient(var(--link), var(--link)) no-repeat top / 100% 0%;
+  }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .entry::before {
+        animation-name: rail-fill;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: cover 25% cover 60%;
+      }
+    }
+  }
+  @keyframes rail-fill { to { background-size: 100% 100%; } }
+  .entry:last-child::before { bottom: 0; }
+  .entry::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--paper);
+    box-shadow: inset 0 0 0 2px var(--link);
+  }
+  .entry.is-current::after { background: var(--link); }
+
+  /* The whole heading is the switch: the roles with their dates, the latest first and largest, a caret
+     beside the first, and the organization and place under them. On phones each date goes under its
+     role; from 640px the dates line up on the right. Every role is placed by column only, so an entry
+     with one role or several flows the same way. */
+  .entry-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 2px 16px;
+    max-width: 66ch;
+    list-style: none;
+    cursor: pointer;
+  }
+  .role-title,
+  .role-period { grid-column: 1; }
+  /* The place has no caret beside it, so it takes the whole width. */
+  .place { grid-column: 1 / -1; }
+  @media (min-width: 640px) {
+    .entry-head { grid-template-columns: minmax(0, 1fr) auto auto; }
+    .role-period { grid-column: 2; text-align: right; }
+  }
+  .entry-head::-webkit-details-marker { display: none; }
+  /* The caret sits in its own circle, like the icons on the site's buttons, in the text's color: it
+     reads as the switch it is (owner's note, 2026-10-25: the bare gray caret was hard to see). */
+  /* Beside the first line of the heading, even when a long role title wraps. */
+  .toggle {
+    grid-row: 1;
+    grid-column: -2;
+    display: grid;
+    place-items: center;
+    align-self: start;
+    margin-top: -4px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--tint);
+    box-shadow: inset 0 0 0 1px var(--hair);
+    color: var(--ink);
+  }
+  .toggle :global(.icon) { width: 1.25rem; height: 1.25rem; }
+  .entry-details[open] .toggle :global(.icon) { rotate: 180deg; }
+  .entry-head:hover h3,
+  .entry-head:hover .toggle { color: var(--link); }
+  .entry-head:hover .toggle { box-shadow: inset 0 0 0 1.5px var(--link); }
+  /* An earlier role at the same place reads as a step below the latest. */
+  span.role-title { margin-top: 6px; font-weight: 600; }
+  .role-period { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .place { margin-top: 8px; }
+  .org { font-weight: 600; }
+  /* On phones the place takes its own line, so a long organization never breaks around it. */
+  .location { display: block; }
+  @media (min-width: 640px) {
+    .location { display: inline; margin-left: 6px; }
+  }
+  .bullets { display: grid; gap: 8px; max-width: 66ch; margin-top: 14px; padding-left: 1.1em; list-style-type: disc; }
+  /* Opens by height where the browser can animate to auto; the caret turns. Instant with reduced motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    .toggle :global(.icon) { transition: rotate 0.25s var(--ease); }
+    .entry-details { interpolate-size: allow-keywords; }
+    .entry-details::details-content {
+      block-size: 0;
+      overflow-y: clip;
+      transition: block-size 300ms var(--ease), content-visibility 300ms allow-discrete;
+    }
+    .entry-details[open]::details-content { block-size: auto; }
+  }
+  .bullets li::marker { color: var(--muted); }
+
+  /* ---------- Education: one panel, degrees split by a hairline ---------- */
+  .degrees { padding: 0; list-style: none; }
+  .degree { display: grid; gap: 4px; align-content: start; padding: 24px; }
+  .degree + .degree { border-top: 1px solid var(--hair); }
+  /* Tablets: the education panel spans the page, so the two degrees sit side by side. */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .degrees { display: grid; grid-template-columns: 1fr 1fr; }
+    .degree + .degree { border-top: 0; border-left: 1px solid var(--hair); }
+  }
+  .degree-title { font-size: 1.1875rem; font-weight: 650; line-height: 1.3; }
+  .facts { display: grid; grid-template-columns: 4rem 1fr; gap: 4px 12px; margin: 10px 0 0; } /* one label width for every degree */
+  .facts dt { color: var(--muted); }
+  .facts dd { margin: 0; }
+</style>

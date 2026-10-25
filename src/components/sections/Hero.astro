@@ -1,0 +1,157 @@
+---
+import Button from '../ui/Button.astro';
+import EmbeddingMap from '../ui/EmbeddingMap.astro';
+import { site } from '../../data/site';
+
+// Each word sits in its own mask, so the headline can rise into place word by word on load.
+const words = 'I build AI that listens, sees, and answers.'.split(' ');
+---
+<section id="top" class="hero wrap" aria-labelledby="hero-title">
+  <div class="hero-copy">
+    <!-- Typed on load, cycling until the hero's switch pauses it (role-typing.ts). Without JavaScript
+         the role shows as it ends, with no caret. -->
+    <p class="role">
+      <span class="sr-only">AI Engineer</span>
+      <span class="typed" aria-hidden="true"></span><noscript><span aria-hidden="true">AI Engineer</span></noscript>
+    </p>
+    <h1 id="hero-title" class="t-hero">
+      {words.map((word, i) => (
+        <>
+          <span class="word"><span style={`--i: ${i}`}>{word}</span></span>{i < words.length - 1 && ' '}
+        </>
+      ))}
+    </h1>
+    <p class="t-lead t-muted rise" style="--d: 420ms">
+      Building real-time voice agents, vision QC, and agentic AI, measured before they ship.
+    </p>
+    <div class="hero-actions rise" style="--d: 520ms">
+      <Button href="#projects" variant="primary" icon="arrow-down">View projects</Button>
+      <Button href={site.resumePath} variant="secondary" icon="download-simple" download label="Download resume (PDF)">Download resume</Button>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <EmbeddingMap priority />
+  </div>
+</section>
+
+<script>
+  import { typeRoles } from '../../scripts/role-typing';
+  const line = document.querySelector<HTMLElement>('#top .role');
+  const typed = line?.querySelector<HTMLElement>('.typed');
+  const start = (typed: HTMLElement, line: HTMLElement, fromRest = false) => {
+    const typing = typeRoles(typed, line, { fromRest });
+    // The round button by the map is the hero's switch: it plays or pauses this line and the map's turn.
+    document.addEventListener('hero-animation', (event) => {
+      if ((event as CustomEvent<{ playing: boolean }>).detail.playing) typing.play();
+      else typing.pause();
+    });
+  };
+  if (line && typed) {
+    // Behind the opening scene (Intro.astro) the line waits until the scene leaves, then carries on
+    // from the title the scene showed, AI Engineer, which lands here.
+    if (document.documentElement.classList.contains('intro-hold')) {
+      document.addEventListener('intro-leave', () => start(typed, line, true), { once: true });
+    } else start(typed, line);
+  }
+</script>
+
+<style>
+  /* The role in the site's machine text (Recursive MONO), in the link color: large, 24px on phones
+     to 36px (owner's notes, 2026-10-25: "jangan tanggung"), still well under the headline. */
+  .role {
+    display: flex;
+    align-items: center;
+    min-height: 1.6em;
+    color: var(--link);
+    font-size: clamp(1.5rem, 1.236rem + 1.127vw, 2.25rem);
+    font-weight: 600;
+    font-variation-settings: "MONO" 1;
+  }
+  /* The caret is painted at the letters' right edge, as their own background: no box of its own
+     moves as they change, so the typing never counts as layout shift. It blinks while the line cycles
+     and goes out when the hero's animation is paused. */
+  .role[data-typing="cycle"] .typed {
+    padding-right: 5px;
+    background: linear-gradient(currentColor, currentColor) no-repeat right center / 2px 1.15em;
+    animation: caret-blink 0.9s linear infinite;
+  }
+  @keyframes caret-blink {
+    0%, 50% { background-size: 2px 1.15em; }
+    50.01%, 100% { background-size: 0 1.15em; }
+  }
+
+  .hero {
+    display: grid;
+    gap: 40px;
+    padding-block: 40px 64px;
+    /* The light behind the map may reach past the page edge; it never widens the page. */
+    overflow-x: clip;
+  }
+  .hero-copy { display: grid; gap: 20px; align-content: center; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+  /* On phones the two buttons stack at one full width instead of wrapping at two widths. */
+  @media (max-width: 479px) { .hero-actions { display: grid; } }
+  .hero-visual { position: relative; isolation: isolate; width: 100%; max-width: 560px; }
+  /* A soft light behind the map, in its two main field colors, so the hero is not one flat color
+     (owner's note, 2026-10-25). Only light: nothing moves, and the sections below keep plain paper. */
+  .hero-visual::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: -14% -14% auto;
+    aspect-ratio: 1;
+    background:
+      radial-gradient(closest-side at 62% 40%, light-dark(rgb(0 144 127 / 0.11), rgb(19 154 143 / 0.2)), transparent),
+      radial-gradient(closest-side at 38% 62%, light-dark(rgb(53 86 181 / 0.08), rgb(90 121 218 / 0.15)), transparent);
+    pointer-events: none;
+  }
+
+  @media (min-width: 1024px) {
+    .hero {
+      grid-template-columns: 7fr 5fr;
+      align-items: center;
+      gap: 48px;
+      padding-block: 48px 64px;
+      min-height: min(calc(100dvh - var(--header-h)), 820px);
+    }
+    .hero-visual { justify-self: end; }
+  }
+
+  /* The page's one entrance (02 §10 #1): the headline rises word by word out of masks, then the
+     subtitle and actions follow. The owner accepted the later LCP this costs (2026-10-25). Room
+     under each mask keeps the comma's tail. */
+  .word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    padding-bottom: 0.12em;
+    margin-bottom: -0.12em;
+  }
+  .word > span { display: inline-block; }
+  /* With reduced motion the same entrance only fades, in place. */
+  .word > span {
+    animation: word-fade 0.7s var(--ease) both;
+    animation-delay: calc(var(--i) * 55ms);
+  }
+  .rise {
+    animation: rise-fade 0.6s var(--ease) both;
+    animation-delay: var(--d, 0ms);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .word > span { animation-name: word-rise; animation-duration: 0.8s; }
+    .rise { animation-name: rise; }
+  }
+  /* Behind the opening scene the entrance waits, unseen, and starts as the scene leaves
+     (scripts/intro.ts). If that script never runs, the hero still fades in after the curtain's own
+     safety net (Intro.astro). */
+  :global(html.intro-hold) .word > span,
+  :global(html.intro-hold) .rise { animation: hero-held 0.6s 6s both; }
+  @keyframes hero-held { from { opacity: 0; } }
+  @keyframes word-fade { from { opacity: 0; } }
+  @keyframes word-rise { from { transform: translateY(110%); } }
+  @keyframes rise-fade { from { opacity: 0; } }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
+  }
+</style>

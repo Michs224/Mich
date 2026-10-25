@@ -1,0 +1,210 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/ui/Icon.astro';
+import Lightbox from '../../components/ui/Lightbox.astro';
+import MetricList from '../../components/ui/MetricList.astro';
+import ProjectMedia from '../../components/ui/ProjectMedia.astro';
+import { formatMonth, getFeatured, type Project } from '../../lib/content';
+import { getMap } from '../../lib/map';
+
+export async function getStaticPaths() {
+  const featured = await getFeatured();
+  return featured.map((project, i) => ({
+    params: { slug: project.id },
+    props: { project, next: featured[(i + 1) % featured.length] },
+  }));
+}
+
+interface Props {
+  project: Project;
+  next: Project;
+}
+const { project, next } = Astro.props;
+const data = project.data;
+// One template for every project. The Markdown body is free text; without one, the description is
+// the text. Metrics show only when the project has them.
+const hasBody = Boolean(project.body?.trim());
+const { Content } = await render(project);
+const map = await getMap();
+
+const STATUS = { 'in-progress': 'In progress', shipped: 'Shipped', course: 'Course project' } as const;
+const period = data.period
+  ? data.period.end
+    ? `${formatMonth(data.period.start)} - ${data.period.end === 'present' ? 'present' : formatMonth(data.period.end)}`
+    : formatMonth(data.period.start)
+  : undefined;
+const meta = [
+  { term: 'Role', value: data.role },
+  { term: 'Period', value: period },
+  { term: 'Status', value: STATUS[data.status] },
+  { term: 'Context', value: data.context },
+].filter((item): item is { term: string; value: string } => Boolean(item.value));
+const hasLinks = Boolean(data.links.repo || data.links.demo || data.links.paper);
+// Tags no stack group names, like LLM or RAG, so every tag of the project still shows on its page.
+const grouped = new Set(Object.values(data.stack).flat());
+const topics = data.tags.filter((tag) => !grouped.has(tag));
+---
+<BaseLayout title={`${data.title} | Michael Geraldin Wijaya`} description={data.summary}>
+  <article class="case wrap">
+    <a class="back" href="/#projects"><Icon name="arrow-left" /><span>Back to projects</span></a>
+
+    <header class="case-head">
+      <div class="head-text">
+        <h1 class="t-case" style={`view-transition-name: work-${project.id}`}>{data.title}</h1>
+        <p class="t-lead t-muted">{data.summary}</p>
+        <dl class="meta">
+          {meta.map((item) => (
+            <div>
+              <dt class="t-small t-muted">{item.term}</dt>
+              <dd>{item.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+      <!-- The card's picture: its cover opens larger, its map view is the same as on the card. -->
+      <div class="shell media-tray">
+      <ProjectMedia
+        project={project}
+        map={map}
+        sizes="(min-width: 1024px) 480px, calc(100vw - 2 * var(--gutter))"
+        alt={data.coverAlt ?? ''}
+        zoom
+        priority
+      />
+      </div>
+    </header>
+
+    <div class="case-body">
+      <div class="case-main">
+        {data.metrics && data.metrics.length > 0 && (
+          <section class="results shell reveal" aria-label="Results">
+            <div class="core">
+              <MetricList metrics={data.metrics} />
+            </div>
+          </section>
+        )}
+        <div class="prose">
+          {hasBody ? <Content /> : <p>{data.description}</p>}
+        </div>
+      </div>
+
+      <!-- The same panel on every project: what it is built with, and where to see it. -->
+      <aside class="case-details shell reveal" aria-label="Project details">
+        <div class="core">
+          <section>
+            <h2>Stack</h2>
+            {Object.keys(data.stack).length > 0 ? (
+              <dl class="stack">
+                {Object.entries(data.stack).map(([group, tools]) => (
+                  <div>
+                    <dt class="t-small t-muted">{group}</dt>
+                    <dd>{tools.map((tool, i) => <>{i > 0 && ', '}<span class="id" translate="no">{tool}</span></>)}</dd>
+                  </div>
+                ))}
+                {topics.length > 0 && (
+                  <div>
+                    <dt class="t-small t-muted">Topics</dt>
+                    <dd>{topics.map((tag, i) => <>{i > 0 && ', '}<span class="id" translate="no">{tag}</span></>)}</dd>
+                  </div>
+                )}
+              </dl>
+            ) : (
+              <p class="tools">{data.tags.map((tag, i) => <>{i > 0 && ', '}<span class="id" translate="no">{tag}</span></>)}</p>
+            )}
+          </section>
+
+          {hasLinks && (
+            <section>
+              <h2>Links</h2>
+              <ul class="links">
+                {data.links.repo && <li><a href={data.links.repo}>Source code on GitHub</a></li>}
+                {data.links.demo && <li><a href={data.links.demo}>Live demo</a></li>}
+                {data.links.paper && <li><a href={data.links.paper}>Paper</a></li>}
+              </ul>
+            </section>
+          )}
+        </div>
+      </aside>
+    </div>
+
+    <nav class="next" aria-label="Next project">
+      <span class="t-small t-muted">Next project</span>
+      <a href={`/work/${next.id}`} class="t-h3"><span>{next.data.title}</span><Icon name="arrow-right" /></a>
+    </nav>
+  </article>
+  <Lightbox />
+</BaseLayout>
+
+<style>
+  .case { padding-block: 32px 96px; display: grid; gap: 48px; }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    width: fit-content;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .back:hover span { text-decoration: underline; text-underline-offset: 0.2em; }
+  .case-head { display: grid; gap: 32px; }
+  .head-text { display: grid; gap: 20px; align-content: start; max-width: 900px; }
+  @media (min-width: 1024px) {
+    .case-head { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: center; column-gap: 56px; }
+  }
+  .media-tray :global(.media) { border-radius: var(--radius-frame); }
+  .meta {
+    display: grid;
+    /* Three facts fit one row in the 1024px header column (audit, 2026-10-25). */
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px 24px;
+    margin: 8px 0 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--hair);
+  }
+  .meta dd { margin: 4px 0 0; font-weight: 600; }
+
+  .results .core { padding: 24px 28px; }
+
+  .case-body { display: grid; gap: 48px; }
+  .case-main { display: grid; gap: 32px; align-content: start; min-width: 0; }
+  /* The details sit in the picture's column, beside the text, and stay in view while it scrolls. */
+  @media (min-width: 1024px) {
+    .case-body { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: start; column-gap: 56px; }
+    .case-details { position: sticky; top: calc(var(--header-h) + 24px); }
+  }
+  .case-details .core { display: grid; gap: 24px; padding: 24px 28px; }
+  .case-details section { display: grid; gap: 14px; }
+  .case-details section + section { padding-top: 24px; border-top: 1px solid var(--hair); }
+  .case-details h2 { font-size: 1.25rem; font-weight: 650; letter-spacing: -0.01em; }
+
+  .prose { display: grid; gap: 20px; max-width: 66ch; }
+  .prose :global(h2) {
+    font-size: clamp(1.3125rem, 1.2025rem + 0.4695vw, 1.625rem);
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    margin-top: 16px;
+  }
+  .prose :global(p) { color: var(--ink); }
+  .prose :global(img) { border-radius: var(--radius-frame); }
+  .prose :global(a.zoom) { cursor: zoom-in; }
+
+  .stack { display: grid; gap: 14px; margin: 0; }
+  .stack dd { margin: 4px 0 0; font-weight: 600; }
+  /* Names can contain spaces, so each stays whole and commas separate them. */
+  .stack .id,
+  .tools .id { white-space: nowrap; }
+  .links { display: grid; gap: 8px; padding-left: 1.2em; }
+
+  .next {
+    display: grid;
+    gap: 6px;
+    padding-top: 32px;
+    border-top: 1px solid var(--hair);
+  }
+  .next a { display: inline-flex; align-items: center; gap: 10px; width: fit-content; color: var(--ink); text-decoration: none; }
+  .next a :global(.icon) { color: var(--link); }
+  .next a:hover { color: var(--link); }
+  .next a:hover span { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.18em; }
+</style>

@@ -1,0 +1,58 @@
+# "highlight" shows in Awards and certificates; "earlier" sits in a disclosure (02 §11). Titles,
+# issuers, and dates as on the old site and the CV (checked 2026-10-25).
+- id: asean-dse-2024
+  title: National Finalist ASEAN Data Science Explorers 2024 Competition
+  issuer: ASEAN Foundation and SAP
+  date: 2024-08
+  tier: highlight
+- id: binus-microsoft-hackathon-2024
+  title: Top 20 Finalist School of Computer Science Hackathon 2024 BINUS x Microsoft (AI4A)
+  issuer: BINUS University and Microsoft
+  date: 2024-06
+  tier: highlight
+- id: beasiswa-unggulan-2023
+  title: Awardee Beasiswa Unggulan Kemendikbudristek 2023
+  # Kemendikbudristek: the ministry's name since 2021 (the old site gave the earlier one).
+  issuer: Ministry of Education, Culture, Research, and Technology, Republic of Indonesia
+  date: 2023-09
+  tier: highlight
+- id: widia-scholarship-2022
+  title: Awardee Widia Partial Scholarship BINUS University
+  issuer: BINUS University
+  date: 2022-09
+  tier: highlight
+- id: lsi-mathematics-2022
+  title: 1st Place Winner of the National Independent Science Competition - Mathematics
+  issuer: Lembaga Sains Indonesia
+  date: 2022-08
+  tier: earlier
+- id: pksn-mathematics-2022
+  title: A+ (Gold Medalist) in the Indonesian Science Competition 2022 - Mathematics
+  issuer: Pusat Kejuaraan Sains Nasional
+  date: 2022-08
+  tier: earlier
+- id: pksn-it-2022
+  title: A+ (Gold Medalist) in the Indonesian Science Competition 2022 - Technology and Information
+  issuer: Pusat Kejuaraan Sains Nasional
+  date: 2022-08
+  tier: earlier
+- id: ajang-juara-2022
+  title: Bronze Medalist in the 7th AJANG JUARA CUP 2022 High School Olympiad - Mathematics
+  issuer: CV. BEE DIGITAL PRESTASI NUSANTARA
+  date: 2022-08
+  tier: earlier
+- id: posi-numeracy-2022
+  title: Gold Medalist in the 2022 National Numeracy Olympiad for High School Students
+  issuer: Pusat Olimpiade Sains Indonesia (POSI)
+  date: 2022-08
+  tier: earlier
+- id: bima-mathematics-2022
+  title: Gold Medalist in the National Student Science Competition - Mathematics
+  issuer: PT BIMA COMPETITION INDONESIA
+  date: 2022-08
+  tier: earlier
+- id: appi-madrasah-2022
+  title: Silver Medalist in the Indonesian Madrasah National Olympiad - Mathematics
+  issuer: Ajang Prestasi Pelajar Indonesia (APPI)
+  date: 2022-08
+  tier: earlier

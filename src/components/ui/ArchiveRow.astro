@@ -1,0 +1,116 @@
+---
+// One project in More projects: its picture (the old site's, or its place on the embedding map when
+// it never had one), its title (a link to the code when it is public), the description as written
+// (D10), and every tag, as the old site listed them.
+import ExternalLabel from './ExternalLabel.astro';
+import ProjectMedia from './ProjectMedia.astro';
+import type { Project } from '../../lib/content';
+import type { getMap } from '../../lib/map';
+
+interface Props {
+  project: Project;
+  map: Awaited<ReturnType<typeof getMap>>;
+}
+const { project, map } = Astro.props;
+const { data } = project;
+const LABELS = { course: 'Course project', client: 'Client work' } as const;
+// A course title that already says so ("(Coursera course)") needs no second label.
+const label =
+  data.status === 'course'
+    ? /course/i.test(data.title) ? undefined : LABELS.course
+    : data.confidential && !data.links.repo ? LABELS.client : undefined;
+---
+<li class="row">
+  <!-- Beside the title, which names the project: the picture's alt stays empty. -->
+  <div class="thumb">
+    <ProjectMedia project={project} map={map} sizes="(min-width: 1024px) 280px, (min-width: 640px) 220px, calc(100vw - 40px)" widths={[320, 560, 720]} />
+  </div>
+  <p class="row-title">
+    {data.links.repo ? (
+      <a href={data.links.repo}>
+        <ExternalLabel text={data.title} />
+        <span class="sr-only">, source on GitHub</span>
+      </a>
+    ) : (
+      <span>{data.title}</span>
+    )}
+    {label && (
+      <>
+        {' '}<span class="label">{label}</span>
+      </>
+    )}
+  </p>
+  <p class="description">{data.description}</p>
+  <p class="tools">
+    <span class="sr-only">Tools: </span>
+    {data.tags.map((tag, i) => (
+      <>{i > 0 && ', '}<span class="id" translate="no">{tag}</span></>
+    ))}
+  </p>
+</li>
+
+<style>
+  /* Every picture shows large (owner, 2026-10-25: a picture too small cannot be seen): across the
+     row on phones, beside the text from 640px. From 1024px the tools take a column of their own, so
+     the wide container is used and the description keeps a readable measure. */
+  .row {
+    position: relative;
+    display: grid;
+    grid-template-areas: 'thumb' 'title' 'desc' 'tools';
+    gap: 6px;
+    border-radius: var(--radius-small);
+  }
+  .thumb { margin-bottom: 10px; }
+  @media (min-width: 640px) {
+    .row {
+      grid-template-columns: 220px minmax(0, 1fr);
+      grid-template-rows: auto auto 1fr;
+      grid-template-areas: 'thumb title' 'thumb desc' 'thumb tools';
+      align-items: start;
+      column-gap: 24px;
+    }
+    .thumb { margin-bottom: 0; }
+  }
+  @media (min-width: 1024px) {
+    .row {
+      grid-template-columns: 280px minmax(0, 1fr) minmax(180px, 240px);
+      grid-template-rows: auto 1fr;
+      grid-template-areas: 'thumb title tools' 'thumb desc tools';
+      column-gap: 32px;
+    }
+    .tools { padding-top: 4px; }
+  }
+  .thumb { grid-area: thumb; overflow: hidden; border-radius: var(--radius-control); box-shadow: 0 0 0 1px var(--hair); }
+  .row-title { grid-area: title; font-size: 1.1875rem; font-weight: 600; }
+  .row-title a { color: var(--ink); text-decoration: none; }
+  /* The whole row is the link's hit area. */
+  .row-title a::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
+  .row-title a:focus-visible { outline: none; }
+  .row:has(a:focus-visible) { outline: 3px solid var(--focus); outline-offset: 4px; }
+  .row:has(a:hover, a:focus-visible) :global(.tail .icon) { color: var(--link); }
+  .row:has(a:hover) .row-title a { color: var(--link); }
+  /* The description exactly as written (D10), not the shortened summary the cards use. */
+  .description { grid-area: desc; max-width: 64ch; color: var(--muted); font-size: 1rem; line-height: 1.55; }
+  /* Every tag, as the old site listed them; names never split, commas separate them (like the cards).
+     Muted and regular weight, so the tags never outrank the description above them. */
+  .tools { grid-area: tools; max-width: 64ch; color: var(--muted); font-size: 0.9375rem; line-height: 1.6; }
+  .tools .id { font-weight: 400; white-space: nowrap; }
+  .label {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 1px 8px;
+    border-radius: var(--radius-control);
+    background: var(--tint);
+    box-shadow: inset 0 0 0 1px var(--hair);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  /* Motion #7 (02 §10): the row slides 4px. The hit area reaches back 4px meanwhile, so a cursor
+     on the row's left edge cannot hover it on and off. */
+  @media (prefers-reduced-motion: no-preference) {
+    .row { transition: transform 200ms var(--ease); }
+    .row:has(a:hover, a:focus-visible) { transform: translateX(4px); }
+    .row:has(a:hover) a::after { left: -4px; }
+  }
+</style>

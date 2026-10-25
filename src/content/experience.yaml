@@ -1,0 +1,43 @@
+# Every bullet from the CV, in its words (02 §11; the owner asked for the full list, 2026-10-25).
+- id: maknadata
+  org: Maknadata
+  location: Jakarta, Indonesia
+  order: 1
+  roles:
+    - title: AI Engineer
+      start: 2025-12
+    - title: AI Engineer - Intern
+      start: 2025-02
+      end: 2025-11
+  bullets:
+    - Developing a real-time conversational AI voice agent for sales roleplay training, building a cascaded voice pipeline (ASR → LLM → TTS) from scratch.
+    - Implemented LLM tool calling to control each conversation turn, grounding responses in scenario facts through Qdrant vector retrieval (Vertex AI embeddings).
+    - Built a multimodal LLM-as-judge pipeline scoring recorded sales conversations against a versioned rubric.
+    - Built AI Agent (Agentic AI) system (RAG, text-to-SQL, etc.) with FastAPI and PostgreSQL backends, containerized using Docker.
+    - Researching and benchmarking proprietary and open-source speech/language models to evaluate cost-efficiency and self-hosting feasibility, reducing dependency on third-party APIs.
+    - Architected backends as layered DDD services with enforced module boundaries, and dispatched long-running evaluation jobs to Cloud Tasks workers on Cloud Run.
+    - Implemented logging and monitoring (observability) for a compliance audit backend service.
+    - Developed an automated system that merges draft reports and interview transcripts using LLMs, streamlining document integration and enhancing workflow efficiency.
+    - Analyzed business use cases to identify opportunities for AI-driven solutions.
+
+- id: binus-tutor
+  org: Bina Nusantara University
+  order: 2
+  roles:
+    - title: Tutor
+      start: 2023-09
+      end: 2024-01
+  bullets:
+    - Conducted weekly study classes for Statistics and Linear Algebra, supporting students throughout one semester.
+    - Facilitated learning by providing explanations, answering questions, and offering guidance to ensure student success in these subjects.
+
+- id: idx-partners
+  org: ID/X Partners x Rakamin Academy
+  location: Jakarta, Indonesia
+  order: 3
+  roles:
+    - title: "Project-Based Virtual Intern: Data Scientist"
+      start: 2023-08
+      end: 2023-09
+  bullets:
+    - Finishing various task related with the activity of Data Scientist from ID/X Partners, such as Big Data Fundamental, Statistics & Data Analytics, and Machine Learning Implementation.

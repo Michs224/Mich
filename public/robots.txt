@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://michgerald.online/sitemap-index.xml

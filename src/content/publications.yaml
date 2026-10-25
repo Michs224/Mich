@@ -1,0 +1,17 @@
+# Checked against the Crossref record for the DOI on 2026-10-25: title, authors and their order, journal,
+# publisher, volume, pages, year, and DOI all match. The conference and the oral presentation are from
+# the owner's CV (Crossref does not record the conference).
+- id: fraud-detection-iccsci
+  title: Comparative Analysis of Machine Learning Algorithms and Data Balancing Techniques for Credit Card Fraud Detection
+  authors:
+    - Michael Geraldin Wijaya
+    - Muhammad Faza Pinaringgi
+    - Alfi Yusrotis Zakiyyah
+    - Meiliana
+  venue: International Conference on Computer Science and Computational Intelligence (ICCSCI)
+  publisher: Procedia Computer Science (Elsevier)
+  volume: "245"
+  pages: 677-688
+  year: 2024
+  doi: "10.1016/j.procs.2024.10.294"
+  note: Oral presentation

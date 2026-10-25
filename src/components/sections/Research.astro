@@ -1,0 +1,227 @@
+---
+// Research: the paper as a full-width citation. Then awards and credentials in two columns, in a
+// section of their own, since they are not research (owner's request, 2026-10-25; 02 §7).
+// Certificates show their pictures, as the old site did (owner's request, 2026-10-25); the ones
+// without a picture wait in an "Other certificates" disclosure. They are course certificates, not
+// certifications (no exam), so the copy says certificates; and the olympiad medals from 2022
+// in another (02 §11).
+import { Picture } from 'astro:assets';
+import Button from '../ui/Button.astro';
+import ExternalLabel from '../ui/ExternalLabel.astro';
+import Icon from '../ui/Icon.astro';
+import { getAwards, getCertifications, getPublications } from '../../lib/content';
+import { site } from '../../data/site';
+
+const publications = await getPublications();
+const { highlights, earlier } = await getAwards();
+const certifications = await getCertifications();
+const pictured = certifications.filter(({ data }) => data.image);
+const unpictured = certifications.filter(({ data }) => !data.image);
+
+const year = (month: string) => month.slice(0, 4);
+const earlierYears = [...new Set(earlier.map(({ data }) => year(data.date)))].join(', ');
+// A disclosure's caret is glued to its last word (like ExternalLabel's arrow), so it never wraps away.
+const glued = (text: string) => ({ head: text.split(' ').slice(0, -1).join(' '), last: text.split(' ').at(-1) });
+const earlierSummary = glued(`Earlier: national math and science olympiads (${earlierYears})`);
+const othersSummary = glued(`Other certificates (${unpictured.length})`);
+---
+<section id="research" class="section wrap" aria-labelledby="research-title">
+  <h2 id="research-title" class="t-h2 section-title">Research</h2>
+
+  {publications.map(({ data }) => {
+    const href = data.doi ? `https://doi.org/${data.doi}` : data.url;
+    return (
+      <div class="shell reveal">
+      <article class="citation core">
+        <div class="cite">
+          <h3 class="t-h3 paper-title">{data.title}</h3>
+          <p>
+            {data.authors.map((author, i) => (
+              <>
+                {i > 0 && ', '}
+                {author === site.name ? <strong>{author}</strong> : author}
+              </>
+            ))}
+          </p>
+          <p class="t-muted">
+            {data.publisher}{data.volume && `, vol. ${data.volume}`}{data.pages && `, pp. ${data.pages}`}, {data.year}.
+            {' '}{data.note ? `${data.note} at ${data.venue}` : data.venue}.
+          </p>
+          {data.doi && <p class="t-small t-muted">DOI <span class="id" translate="no">{data.doi}</span></p>}
+        </div>
+        {href && <Button href={href} variant="secondary" icon="arrow-up-right">Read the paper</Button>}
+      </article>
+      </div>
+    );
+  })}
+</section>
+
+<section id="awards" class="section wrap" aria-labelledby="awards-title">
+  <h2 id="awards-title" class="t-h2 section-title">Awards and certificates</h2>
+  <div class="lists">
+    <div id="achievements" class="reveal">
+      <h3 class="t-h3 list-title">Awards</h3>
+      <ul class="items">
+        {highlights.map(({ data }) => (
+          <li>
+            <p class="item-title">{data.title}</p>
+            <p class="t-small t-muted">{data.issuer}, {year(data.date)}</p>
+          </li>
+        ))}
+      </ul>
+      {earlier.length > 0 && (
+        <details class="more earlier">
+          <summary>
+            {earlierSummary.head}{' '}<span class="tail">{earlierSummary.last}<Icon name="caret-down" /></span>
+          </summary>
+          <ul class="items">
+            {earlier.map(({ data }) => (
+              <li>
+                <p class="item-title">{data.title}</p>
+                <p class="t-small t-muted">{data.issuer}, {year(data.date)}</p>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+    </div>
+
+    <div id="certificates" class="reveal">
+      <h3 class="t-h3 list-title">Certificates</h3>
+      <ul class="certs">
+        {pictured.map(({ data }) => {
+          // The picture and the title are one link to the place that verifies the credential.
+          const Card = data.url ? 'a' : 'div';
+          return (
+            <li class="cert">
+              <Card class="cert-card" href={data.url}>
+                <span class="cert-frame">
+                  <Picture
+                    src={data.image!}
+                    formats={['avif', 'webp']}
+                    widths={[320, 480, 800].filter((w) => w <= data.image!.width)}
+                    sizes="(min-width: 1320px) 390px, (min-width: 1024px) 30vw, 45vw"
+                    alt=""
+                  />
+                </span>
+                <span class="item-title">
+                  <ExternalLabel text={data.title} />
+                  {data.url && <span class="sr-only">, verify the credential</span>}
+                </span>
+              </Card>
+              <p class="t-small t-muted">{data.issuer}, {year(data.date)}</p>
+            </li>
+          );
+        })}
+      </ul>
+      {unpictured.length > 0 && (
+        <details class="more also">
+          <summary>
+            {othersSummary.head}{' '}<span class="tail">{othersSummary.last}<Icon name="caret-down" /></span>
+          </summary>
+          <ul class="items">
+            {unpictured.map(({ data }) => (
+              <li>
+                <p class="item-title">
+                  {data.url ? (
+                    <a href={data.url}>
+                      <ExternalLabel text={data.title} />
+                      <span class="sr-only">, verify the credential</span>
+                    </a>
+                  ) : (
+                    data.title
+                  )}
+                </p>
+                <p class="t-small t-muted">{data.issuer}, {year(data.date)}</p>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .citation {
+    display: grid;
+    justify-items: start;
+    gap: 24px;
+    padding: 28px 24px;
+  }
+  @media (min-width: 768px) { .citation { padding: 40px 48px; } }
+  /* Wide screens: the citation on the left, the way to read it on the right. */
+  @media (min-width: 1024px) {
+    .citation { grid-template-columns: minmax(0, 1fr) auto; align-items: start; column-gap: 48px; }
+  }
+  .cite { display: grid; gap: 10px; }
+  .cite p { max-width: 72ch; }
+  .paper-title { max-width: 56ch; margin-bottom: 4px; }
+  .citation strong { font-weight: 650; }
+  .cite .id { overflow-wrap: anywhere; }
+
+  /* The awards, then the certificates under them, each across the whole width: the pictures get the
+     room, and no column stands half empty beside a long one (owner, 2026-10-25). */
+  .lists { display: grid; gap: 56px; }
+
+  /* Credentials with a picture, large enough to make out: two to a row, three from 1024px. */
+  .certs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 20px; padding: 0; list-style: none; }
+  @media (min-width: 1024px) {
+    .certs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px 28px; }
+  }
+  .cert { display: grid; gap: 6px; align-content: start; }
+  /* In two columns the ninth card would sit alone at the left; it centers under the others. */
+  @media (max-width: 1023px) {
+    .cert:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 10px); }
+  }
+  .cert-card { display: grid; gap: 12px; color: var(--ink); text-decoration: none; }
+  /* Documents and badges differ in shape, so each sits whole on white, like a diagram (ProjectMedia). */
+  .cert-frame {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-control);
+    background: var(--diagram-bg);
+    box-shadow: inset 0 0 0 1px var(--hair);
+    overflow: hidden;
+  }
+  /* Dimmed a little on dark pages, like the diagrams (ProjectMedia). */
+  @supports (color: light-dark(#000, #fff)) {
+    @media (prefers-color-scheme: dark) {
+      .cert-frame { filter: brightness(0.88); }
+    }
+  }
+  .cert-frame :global(picture) { display: contents; }
+  /* Pinned to the frame, 8px in: a percentage height alone did not hold in a frame sized by its
+     aspect ratio, so square badges grew with their width and were cut off. */
+  .cert-frame :global(img) {
+    position: absolute;
+    inset: 8px;
+    width: calc(100% - 16px);
+    height: calc(100% - 16px);
+    object-fit: contain;
+  }
+  a.cert-card:hover .item-title { color: var(--link); }
+  a.cert-card:hover .cert-frame { box-shadow: inset 0 0 0 1.5px var(--link); }
+  @media (prefers-reduced-motion: no-preference) {
+    .cert-frame :global(img) { transition: transform 0.4s var(--ease); }
+    a.cert-card:hover .cert-frame :global(img) { transform: scale(1.03); }
+  }
+
+  /* The few without a picture wait in a disclosure of their own, as text, one per line (owner's
+     request, 2026-10-25, like the old site's "Other Certificates"). */
+  .also { margin-top: 28px; }
+  .also .items { margin-top: 12px; }
+  .list-title { margin-bottom: 20px; }
+  .items { display: grid; gap: 16px; padding: 0; list-style: none; }
+  @media (min-width: 768px) {
+    .items { grid-template-columns: 1fr 1fr; column-gap: 48px; }
+  }
+  .item-title { font-weight: 600; }
+  .item-title a { color: var(--ink); text-decoration: none; }
+  .item-title a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+
+  /* The disclosure's look and motion are the shared details.more (global.css). */
+  .earlier { margin-top: 20px; }
+  .earlier .items { margin-top: 12px; }
+</style>
