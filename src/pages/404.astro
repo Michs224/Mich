@@ -9,7 +9,12 @@ import Button from '../components/ui/Button.astro';
 >
   <section class="missing wrap" aria-labelledby="missing-title">
     <h1 id="missing-title" class="t-hero">Page not found</h1>
-    <p class="t-lead t-muted">The address may be mistyped, or the link may be out of date.</p>
+    <!-- A light touch, from the work on this site (the agent that searches documents, a database, and
+         the web), then the plain reason. The emoji is decoration: screen readers skip it. -->
+    <p class="t-lead t-muted">
+      I sent my agent to find this page, and it came back empty-handed <span aria-hidden="true">🤖</span>
+    </p>
+    <p class="t-muted">The link may be out of date, or the address mistyped.</p>
     <div class="actions">
       <Button href="/" variant="primary" icon="house">Go to the home page</Button>
       <Button href="/#projects" variant="secondary" icon="arrow-right">View projects</Button>

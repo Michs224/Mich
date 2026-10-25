@@ -68,8 +68,13 @@ test('404 is noindex', async ({ page }) => {
 test('404 points home without talking about the old site', async ({ page }) => {
   await page.goto('/this-page-does-not-exist');
   await expect(page.locator('main')).not.toContainText(/old site/i);
-  // It says why, not only that: the likely causes, in one line (owner, 2026-10-25).
-  await expect(page.locator('main .t-lead')).toHaveText('The address may be mistyped, or the link may be out of date.');
+  // A light touch (owner, 2026-10-25: not so stiff, one emoji at most), and still why: the likely
+  // causes. The emoji is decoration, so screen readers skip it.
+  await expect(page.locator('main .t-lead')).toContainText('I sent my agent to find this page, and it came back empty-handed');
+  await expect(page.locator('main')).toContainText('The link may be out of date, or the address mistyped.');
+  const emoji = await page.locator('main').evaluate((el) => el.textContent!.match(/\p{Extended_Pictographic}/gu) ?? []);
+  expect(emoji).toHaveLength(1);
+  await expect(page.locator('main [aria-hidden="true"]', { hasText: emoji[0] })).toHaveCount(1);
   await expect(page.locator('main').getByRole('link', { name: 'Go to the home page' })).toHaveAttribute('href', '/');
 });
 
