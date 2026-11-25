@@ -73,7 +73,8 @@ test('404 points home without talking about the old site', async ({ page }) => {
   await expect(page.locator('main .t-lead')).toContainText('I sent my agent to find this page, and it came back empty-handed');
   await expect(page.locator('main')).toContainText('The link may be out of date, or the address mistyped.');
   const emoji = await page.locator('main').evaluate((el) => el.textContent!.match(/\p{Extended_Pictographic}/gu) ?? []);
-  expect(emoji).toHaveLength(1);
+  // A deadpan smile (owner, 2026-11-25): the joke is told flat, not laughed at.
+  expect(emoji).toEqual(['🙂']);
   await expect(page.locator('main [aria-hidden="true"]', { hasText: emoji[0] })).toHaveCount(1);
   await expect(page.locator('main').getByRole('link', { name: 'Go to the home page' })).toHaveAttribute('href', '/');
 });
